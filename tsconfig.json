@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "esModuleInterop": true,
+    "target": "es5",
     "jsx": "react",
+    "strict": true,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@figma"
