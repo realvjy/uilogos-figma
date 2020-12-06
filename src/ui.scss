@@ -20,6 +20,7 @@ main{
   .content-panel{
     display: flex;
     flex-direction: column;
+    height: 290px;
     .content-menu{
       display: flex;
       justify-content: center;
@@ -55,8 +56,6 @@ main{
 
 footer{
   background: rgba(0, 0, 0, 0.03);
-  position: absolute;
-  bottom: 0;
   width: 100%;
   .footer-credit{
     padding: 16px;
@@ -65,6 +64,14 @@ footer{
     flex-direction: row;
     
     .logo{
+      font-size: 10px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      color: #545454;
+      a{
+        margin-right: 4px;
+      }
       svg{
   
       }
@@ -82,5 +89,87 @@ footer{
         color: #3265E2;
       }
     }
+  }
+}
+
+.menu-title{
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  .icon-box{
+    a{
+      display: flex;
+      line-height: 0;
+      padding: 11px 16px;
+      svg{
+        width: 10px;
+        height: 8px;
+      }
+    }
+  }
+  .menu-text{
+    font-size: 11px;
+    font-weight: 600;
+    flex: 6;
+    padding-right: 32px;
+    text-align: center;
+    color: rgb(64,64,64);
+  }
+}
+
+
+.logos-container{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 12px;
+  .logos{
+    &.mark{
+      width: 25%;
+    }
+    &.type{
+      width: 33.3%;
+    }
+    
+    &.flag{
+      width: 33.3%;
+    }
+    
+    .logo-wrap{
+      padding: 4px;
+      text-align: center;
+      span{
+        font-weight: 500;
+        font-size: 10px;
+      }
+      .square-logo{
+        padding: 6px;
+        border: 0.5px solid #EBEBEB;
+        border-radius: 4px;
+        img{
+          width: 100%;
+        }
+      }
+      
+      .full-logo{
+        padding: 8px 6px;
+        border: 0.5px solid #EBEBEB;
+        border-radius: 4px;
+        img{
+          max-width: 100%;
+        }
+      }
+      
+      .c-flag{
+        border: 0.5px solid #EBEBEB;
+        border-radius: 8px;
+        img{
+          max-width: 100%;
+          border-radius: 8px;
+        }
+      }
+    }
+    
   }
 }
