@@ -1,3 +1,4 @@
+// This plugin will add uilogos from uilogos.co to your artboard
 
 // Show the plugin UI
 figma.showUI(__html__, {
@@ -7,9 +8,14 @@ figma.showUI(__html__, {
   }
 );
 
+// function clone(val) {
+//     return JSON.parse(JSON.stringify(val))
+//   }
 
+console.log('uilogos running...');
 
-figma.ui.onmessage = msg => {
+//  Message received
+figma.ui.onmessage = (msg) => {
     const uiLogosUrl = "https://uilogos.co/uilogos/uilogos.json";
 
     // const getAllLogos = async () => {

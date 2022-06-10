@@ -25,22 +25,18 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
-    "@types/react": "^17.0.19",
-    "@types/react-dom": "^17.0.9",
+    "@types/react": "^18.0.10",
+    "@types/react-dom": "^18.0.5",
     "@types/styled-components": "^5.1.25",
-    "axios": "^0.27.2",
     "browser-image-compression": "^2.0.0",
     "compressorjs": "^1.1.1",
     "fuse.js": "^6.6.2",
-    "node-fetch": "^3.2.4",
-    "node-sass": "^7.0.1",
-    "react": "^17.0.2",
+    "react": "^18.1.0",
     "react-dev-utils": "^12.0.1",
     "react-dom": "^17.0.2",
     "react-image-compressor": "^1.0.1",
     "react-image-file-resizer": "^0.4.8",
     "react-native-image-resizer": "^1.4.5",
-    "sass-loader": "^13.0.0",
     "styled-components": "^5.3.5"
   },
   "repository": "git@github.com:realvjy/uilogos-figma.git"
