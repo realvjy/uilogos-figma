@@ -6,12 +6,14 @@
   --size-xxxsmall: 4px;
   --size-xxsmall: 8px;
   --list-hover-bg: rgba(245,245,245, 0.5);
-  --svg-fill-color: rgba(0,0,0);
+  --image-filter: none;
 }
 
 .figma-dark body{
   --list-hover-bg: rgba(245,245,245, 0.15);
   --svg-fill-color: rgba(255,255,255);
+  --footer-svg-fill: #fff;
+  --image-filter: invert(100%) grayscale(1);
 }
 
 body {

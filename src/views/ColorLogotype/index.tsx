@@ -7,9 +7,13 @@ import ImageGrid from "../../components/image-grid";
 const ColorLogotype = (props) => {
   const logos = props.logoData;
 
+  const handleCallback = (childData) => {
+    props.parentCallback(childData);
+  };
+
   return (
     <ContentPanel id="color-logotype">
-      <MenuTitle title="Color Logotype" />
+      <MenuTitle title="Color Logotype" parentCallback={handleCallback} />
 
       <ImageContainer className="grid-3 logotype">
         {logos.map((logo, i) => {

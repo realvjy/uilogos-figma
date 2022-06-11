@@ -13,9 +13,11 @@ import "./ui.css";
 
 declare function require(path: string): any;
 
-const App = () => {
-  const [currentPage] = React.useState("home");
-
+const App = (props) => {
+  const [currentPage, setCurrentPage] = React.useState("home");
+  const handleCallback = (childData) => {
+    setCurrentPage(childData);
+  };
   const [uiLogos, setUILogos] = React.useState([]);
 
   const [fullLogosColor, setFullLogosColor] = React.useState([]);
@@ -44,19 +46,6 @@ const App = () => {
     fetchData();
   }, []);
 
-  // const { name } = props;
-
-  // const [results, setResults] = React.useState(icons);
-
-  // console.log(Object.values(uiLogos));
-
-  // console.log(flags);
-  // console.log(logoMarks);
-
-  // flags.map((flag) => {
-  //   console.log(flag.Name);
-  // });
-
   function onWindowResize(windowSize: { width: number; height: number }) {
     parent.postMessage(
       {
@@ -84,7 +73,39 @@ const App = () => {
         // return <ColorLogotype logoData={fullLogosColor} />;
         // return <BlackLogotype logoData={fullLogosBW} />;
         // return <CountryFlag logoData={flags} />;
-        return <Home />;
+        return <Home parentCallback={handleCallback} />;
+      case "colorlogotype":
+        return (
+          <ColorLogotype
+            logoData={fullLogosColor}
+            parentCallback={handleCallback}
+          />
+        );
+      case "blacklogotype":
+        return (
+          <ColorLogotype
+            logoData={fullLogosBW}
+            parentCallback={handleCallback}
+          />
+        );
+      case "colorlogomark":
+        return (
+          <ColorLogotype
+            logoData={logoMarkColor}
+            parentCallback={handleCallback}
+          />
+        );
+      case "blacklogomark":
+        return (
+          <ColorLogotype
+            logoData={logoMarkBW}
+            parentCallback={handleCallback}
+          />
+        );
+      case "flags":
+        return (
+          <ColorLogotype logoData={flags} parentCallback={handleCallback} />
+        );
     }
   };
 

@@ -49,6 +49,9 @@ const FooterCredit = styled.div`
     color: var(--figma-color-icon-brand);
     text-decoration: none;
     opacity: 0.8;
+    svg {
+      filter: var(--image-filter);
+    }
   }
   .left-icon {
     span {

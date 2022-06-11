@@ -6,10 +6,12 @@ import ImageGrid from "../../components/image-grid";
 
 const CountryFlag = (props) => {
   const flags = props.logoData;
-
+  const handleCallback = (childData) => {
+    props.parentCallback(childData);
+  };
   return (
     <ContentPanel id="color-logotype">
-      <MenuTitle title="Country Flags" />
+      <MenuTitle title="Country Flags" parentCallback={handleCallback} />
 
       <ImageContainer className="grid-4">
         {flags.map((flag, i) => {
