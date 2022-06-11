@@ -8,7 +8,6 @@ import BlackLogomark from "./views/BlackLogomark";
 import ColorLogotype from "./views/ColorLogotype";
 import BlackLogotype from "./views/BlackLogotype";
 import CountryFlag from "./views/CountryFlag";
-const { uilogos, flags } = require("./data");
 
 import "./ui.css";
 
