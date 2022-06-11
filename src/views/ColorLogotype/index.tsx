@@ -1,86 +1,55 @@
 import * as React from "react";
 
-import ColorMarkIcon from "../../asset/color-mark";
-import BlackMarkIcon from "../../asset/black-mark";
-import ColorTypeIcon from "../../asset/color-type";
-import BlackTypeIcon from "../../asset/black-type";
-import FlagIcon from "../../asset/flag";
-import Dots from "../../asset/dots";
+import styled from "styled-components";
 import MenuTitle from "../../components/menu-title";
+import ImageGrid from "../../components/image-grid";
 
-const ColorLogotype = () => {
+const ColorLogotype = (props) => {
+  const logos = props.logoData;
+
   return (
-    <div className="content-panel" id="color-logomark">
+    <ContentPanel id="color-logotype">
       <MenuTitle title="Color Logotype" />
-      <div className="logos-container">
-        <div className="logos type">
-          <div className="logo-wrap">
-            <div className="full-logo">
-              <img
-                src="https://uilogos.co/uilogos/full-logo/color/code-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
 
-        <div className="logos type">
-          <div className="logo-wrap">
-            <div className="full-logo">
-              <img
-                src="https://uilogos.co/uilogos/full-logo/color/muzica.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="logos type">
-          <div className="logo-wrap">
-            <div className="full-logo">
-              <img
-                src="https://uilogos.co/uilogos/full-logo/color/nirastate.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="logos type">
-          <div className="logo-wrap">
-            <div className="full-logo">
-              <img
-                src="https://uilogos.co/uilogos/full-logo/color/code-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="logos type">
-          <div className="logo-wrap">
-            <div className="full-logo">
-              <img
-                src="https://uilogos.co/uilogos/full-logo/color/hex-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="logos type">
-          <div className="logo-wrap">
-            <div className="full-logo">
-              <img
-                src="https://uilogos.co/uilogos/full-logo/color/code-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <ImageContainer className="grid-3 logotype">
+        {logos.map((logo, i) => {
+          return (
+            <ImageGrid
+              name={logo.Name}
+              url={logo.URL}
+              keyword={"icon.keywords"}
+              key={logo.Name}
+              color={"color"}
+              type={"full"}
+              imgRef={"imgRef"}
+              canRef={"canvasRef"}
+            />
+          );
+        })}
+      </ImageContainer>
+    </ContentPanel>
   );
 };
 
 export default ColorLogotype;
+
+const ContentPanel = styled.div`
+  display: block;
+`;
+
+const ImageContainer = styled.div`
+  display: grid;
+
+  grid-gap: 6px;
+  padding: 8px;
+  margin-bottom: 40px;
+  &.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  &.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+`;

@@ -4,8 +4,8 @@ import * as React from "react";
 
 // shuffle icon
 export const ShuffleIcon = ({
-  height = "24px",
-  width = "24px",
+  height = "11px",
+  width = "11px",
   secondaryColor,
   ...props
 }: React.SVGProps<SVGSVGElement> & { secondaryColor?: string }) => (
@@ -13,7 +13,7 @@ export const ShuffleIcon = ({
     xmlns="http://www.w3.org/2000/svg"
     width={width}
     height={height}
-    viewBox="0 0 24 24"
+    viewBox="0 0 11 11"
     clipRule="evenodd"
     fillRule="evenodd"
     {...props}
@@ -27,8 +27,8 @@ export const ShuffleIcon = ({
 
 // color icon
 export const ListIcon = ({
-  height = "24px",
-  width = "24px",
+  height = "11px",
+  width = "11px",
   secondaryColor,
   ...props
 }: React.SVGProps<SVGSVGElement> & { secondaryColor?: string }) => (
@@ -36,7 +36,7 @@ export const ListIcon = ({
     xmlns="http://www.w3.org/2000/svg"
     width={width}
     height={height}
-    viewBox="0 0 24 24"
+    viewBox="0 0 11 11"
     clipRule="evenodd"
     fillRule="evenodd"
     {...props}
@@ -45,5 +45,28 @@ export const ListIcon = ({
     <path d="M10 1H7V4H10V1Z" fill="black" />
     <path d="M10 7H7V10H10V7Z" fill="black" />
     <path d="M4 7H1V10H4V7Z" fill="black" />
+  </svg>
+);
+
+// color icon
+export const BackIcon = ({
+  width = "20",
+  height = "16",
+  secondaryColor,
+  ...props
+}: React.SVGProps<SVGSVGElement> & { secondaryColor?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    viewBox="0 0 20 16"
+    clipRule="evenodd"
+    fillRule="evenodd"
+    {...props}
+  >
+    <path
+      fill="#1C1C1C"
+      d="M18.803 6.837H4.03L8.814 2.06A1.171 1.171 0 008.044 0c-.353 0-.67.156-.886.402L.338 7.193c-.108.11-.194.243-.25.39l-.002.008a1.172 1.172 0 00.003.888l-.003-.008c.058.156.144.289.252.399l6.82 6.789c.212.21.505.341.828.341a1.168 1.168 0 001.17-1.17c.001-.322-.13-.615-.34-.827L4.03 9.226h14.773a1.195 1.195 0 10-.001-2.389z"
+    ></path>
   </svg>
 );

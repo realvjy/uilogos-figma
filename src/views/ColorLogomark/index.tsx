@@ -1,97 +1,56 @@
 import * as React from "react";
 
-import ColorMarkIcon from "../../asset/color-mark";
-import BlackMarkIcon from "../../asset/black-mark";
-import ColorTypeIcon from "../../asset/color-type";
-import BlackTypeIcon from "../../asset/black-type";
-import FlagIcon from "../../asset/flag";
-import Dots from "../../asset/dots";
 import MenuTitle from "../../components/menu-title";
+import styled from "styled-components";
+import ImageGrid from "../../components/image-grid";
 
-const ColorLogomark = () => {
+const ColorLogomark = (props) => {
+  const logos = props.logoData;
+
   return (
-    <div className="content-panel" id="color-logomark">
+    <ContentPanel id="color-logomark">
       <MenuTitle title="Color Logomark" />
-      <div className="logos-container">
-        <div className="logos mark">
-          <div className="logo-wrap">
-            <div className="square-logo">
-              <img
-                src="https://uilogos.co/uilogos/mark/color/a-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
 
-        <div className="logos mark">
-          <div className="logo-wrap">
-            <div className="square-logo">
-              <img
-                src="https://uilogos.co/uilogos/mark/color/a-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="logos mark">
-          <div className="logo-wrap">
-            <div className="square-logo">
-              <img
-                src="https://uilogos.co/uilogos/mark/color/a-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="logos mark">
-          <div className="logo-wrap">
-            <div className="square-logo">
-              <img
-                src="https://uilogos.co/uilogos/mark/color/a-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="logos mark">
-          <div className="logo-wrap">
-            <div className="square-logo">
-              <img
-                src="https://uilogos.co/uilogos/mark/color/a-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="logos mark">
-          <div className="logo-wrap">
-            <div className="square-logo">
-              <img
-                src="https://uilogos.co/uilogos/mark/color/a-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="logos mark">
-          <div className="logo-wrap">
-            <div className="square-logo">
-              <img
-                src="https://uilogos.co/uilogos/mark/color/a-lab.png"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <ImageContainer className="grid-4">
+        {logos.map((logo, i) => {
+          return (
+            <ImageGrid
+              name={"atica"}
+              url={logo.URL}
+              keyword={"icon.keywords"}
+              key={"icon.name"}
+              color={"color"}
+              type={"mark"}
+              imgRef={"imgRef"}
+              canRef={"canvasRef"}
+            />
+          );
+        })}
+      </ImageContainer>
+    </ContentPanel>
   );
 };
 
 export default ColorLogomark;
+
+const ContentPanel = styled.div`
+  display: block;
+`;
+
+const ImageContainer = styled.div`
+  display: grid;
+
+  grid-gap: 6px;
+  padding: 8px;
+  margin-bottom: 40px;
+  &.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 4px;
+  }
+  &.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+`;

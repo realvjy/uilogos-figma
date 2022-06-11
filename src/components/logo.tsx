@@ -2,8 +2,8 @@ import * as React from "react";
 
 // uilogologo
 export const Logo = ({
-  height = "69px",
-  width = "16px",
+  width = "69px",
+  height = "16px",
   secondaryColor,
   ...props
 }: React.SVGProps<SVGSVGElement> & { secondaryColor?: string }) => (
@@ -11,7 +11,7 @@ export const Logo = ({
     xmlns="http://www.w3.org/2000/svg"
     width={width}
     height={height}
-    viewBox="0 0 60 16"
+    viewBox="0 0 69 16"
     {...props}
   >
     <path

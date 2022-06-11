@@ -1,4 +1,20 @@
-:root {
+
+.figma-light body {
+
+  --shadow-hud: 0 5px 17px rgba(0, 0, 0, 0.2), 0 2px 7px rgba(0, 0, 0, 0.15);
+  --shadow-floating-window: 0 2px 14px rgba(0, 0, 0, 0.15);
+  --size-xxxsmall: 4px;
+  --size-xxsmall: 8px;
+  --list-hover-bg: rgba(245,245,245, 0.5);
+  --svg-fill-color: rgba(0,0,0);
+}
+
+.figma-dark body{
+  --list-hover-bg: rgba(245,245,245, 0.15);
+  --svg-fill-color: rgba(255,255,255);
+}
+
+body {
   --font-stack: "Inter", sans-serif;
   --font-size-xsmall: 11px;
   --font-size-small: 12px;
@@ -20,13 +36,6 @@
   --border-radius-small: 2px;
   --border-radius-med: 5px;
   --border-radius-large: 6px;
-  --shadow-hud: 0 5px 17px rgba(0, 0, 0, 0.2), 0 2px 7px rgba(0, 0, 0, 0.15);
-  --shadow-floating-window: 0 2px 14px rgba(0, 0, 0, 0.15);
-  --size-xxxsmall: 4px;
-  --size-xxsmall: 8px;
-}
-
-body {
   margin: 0;
   font-family: var(--font-stack);
   -webkit-font-smoothing: antialiased;
@@ -62,6 +71,15 @@ body {
   font-display: swap;
   src: url('https://rsms.me/inter/font-files/Inter-Regular.woff2?v=3.9') format('woff2'),
     url('https://rsms.me/inter/font-files/Inter-Regular.woff?v=3.9') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("https://rsms.me/inter/font-files/Inter-Medium.woff2?v=3.19") format("woff2");
 }
 
 button {
@@ -136,3 +154,25 @@ input:focus {
   font-weight: 600;
 }
 
+
+.logotype button {
+  min-height: 72px;
+}
+
+.show{
+  display: block;
+  visibility: visible;
+  font-size: 9px;
+  color: var(--figma-color-text-secondary);
+  text-align: center;
+  display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hide{
+  display: none;
+  visibility: hidden;
+}

@@ -1,65 +1,56 @@
 import * as React from "react";
 
-import ColorMarkIcon from "../../asset/color-mark";
-import BlackMarkIcon from "../../asset/black-mark";
-import ColorTypeIcon from "../../asset/color-type";
-import BlackTypeIcon from "../../asset/black-type";
-import FlagIcon from "../../asset/flag";
-import Dots from "../../asset/dots";
+import styled from "styled-components";
 import MenuTitle from "../../components/menu-title";
+import ImageGrid from "../../components/image-grid";
 
-const CountryFlag = () => {
+const CountryFlag = (props) => {
+  const flags = props.logoData;
+
   return (
-    <div className="content-panel" id="color-logomark">
-      <MenuTitle title="Country Flag" />
-      <div className="logos-container">
-        <div className="logos flag">
-          <div className="logo-wrap">
-            <div className="c-flag">
-              <img src="https://uilogos.co/uilogos/flags/algeria.png" alt="" />
-            </div>
-            <span>Slgeria</span>
-          </div>
-        </div>
+    <ContentPanel id="color-logotype">
+      <MenuTitle title="Country Flags" />
 
-        <div className="logos flag">
-          <div className="logo-wrap">
-            <div className="c-flag">
-              <img src="https://uilogos.co/uilogos/flags/algeria.png" alt="" />
-            </div>
-            <span>Slgeria</span>
-          </div>
-        </div>
-
-        <div className="logos flag">
-          <div className="logo-wrap">
-            <div className="c-flag">
-              <img src="https://uilogos.co/uilogos/flags/algeria.png" alt="" />
-            </div>
-            <span>Slgeria</span>
-          </div>
-        </div>
-
-        <div className="logos flag">
-          <div className="logo-wrap">
-            <div className="c-flag">
-              <img src="https://uilogos.co/uilogos/flags/algeria.png" alt="" />
-            </div>
-            <span>Slgeria</span>
-          </div>
-        </div>
-
-        <div className="logos flag">
-          <div className="logo-wrap">
-            <div className="c-flag">
-              <img src="https://uilogos.co/uilogos/flags/algeria.png" alt="" />
-            </div>
-            <span>Slgeria</span>
-          </div>
-        </div>
-      </div>
-    </div>
+      <ImageContainer className="grid-4">
+        {flags.map((flag, i) => {
+          return (
+            <ImageGrid
+              name={flag.Name}
+              url={flag.URL}
+              keyword={"icon.keywords"}
+              key={flag.Name}
+              color={"color"}
+              type={"flags"}
+              imgRef={"imgRef"}
+              canRef={"canvasRef"}
+            />
+          );
+        })}
+      </ImageContainer>
+    </ContentPanel>
   );
 };
 
 export default CountryFlag;
+
+const ContentPanel = styled.div`
+  display: block;
+`;
+
+const ImageContainer = styled.div`
+  display: grid;
+
+  grid-gap: 6px;
+  padding: 8px;
+  margin-bottom: 40px;
+  &.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 8px;
+  }
+  &.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+`;
