@@ -1,15 +1,7 @@
 import * as React from "react";
 
 import theme from "../theme";
-import {
-  MemoryRouter as Router,
-  Route,
-  Routes,
-  Link,
-  LinkProps,
-  useResolvedPath,
-  useMatch,
-} from "react-router-dom";
+
 import styled from "styled-components";
 import { ListIcon, ShuffleIcon } from "../components/icons";
 import {
@@ -20,12 +12,10 @@ import {
   FlagIcon,
 } from "../components/logos-icons";
 import Footer from "../components/footer";
-import ColorLogomark from "./ColorLogomark";
 
 declare function require(path: string): any;
 
 const Home = (props) => {
-  // const iconData = props;
   const [currentPage, setCurrentPage] = React.useState("home");
   console.log(props);
   const onClickIcon = (event) => {
@@ -44,12 +34,8 @@ const Home = (props) => {
             <Button>
               <ShuffleIcon height="12px" width="12px" />
             </Button>
-            <Button>
-              <ListIcon
-                height="12px"
-                width="12px"
-                onClick={() => onClickIcon("colorlogotype")}
-              />
+            <Button onClick={() => onClickIcon("colorlogotype")}>
+              <ListIcon height="12px" width="12px" />
             </Button>
           </Buttons>
         </OptionBox>
@@ -63,12 +49,8 @@ const Home = (props) => {
             <Button>
               <ShuffleIcon height="12px" width="12px" />
             </Button>
-            <Button>
-              <ListIcon
-                height="12px"
-                width="12px"
-                onClick={() => onClickIcon("blacklogotype")}
-              />
+            <Button onClick={() => onClickIcon("blacklogotype")}>
+              <ListIcon height="12px" width="12px" />
             </Button>
           </Buttons>
         </OptionBox>
@@ -82,12 +64,8 @@ const Home = (props) => {
             <Button>
               <ShuffleIcon height="12px" width="12px" />
             </Button>
-            <Button>
-              <ListIcon
-                height="12px"
-                width="12px"
-                onClick={() => onClickIcon("colorlogomark")}
-              />
+            <Button onClick={() => onClickIcon("colorlogomark")}>
+              <ListIcon height="12px" width="12px" />
             </Button>
           </Buttons>
         </OptionBox>
@@ -95,18 +73,14 @@ const Home = (props) => {
         <OptionBox>
           <Title>
             <BlackMarkIcon height="36px" width="36px" className="lefticon" />
-            <p>B/W Logotype</p>
+            <p>B/W Logomark</p>
           </Title>
           <Buttons>
             <Button>
               <ShuffleIcon height="12px" width="12px" />
             </Button>
-            <Button>
-              <ListIcon
-                height="12px"
-                width="12px"
-                onClick={() => onClickIcon("blacklogomark")}
-              />
+            <Button onClick={() => onClickIcon("blacklogomark")}>
+              <ListIcon height="12px" width="12px" />
             </Button>
           </Buttons>
         </OptionBox>
@@ -120,12 +94,8 @@ const Home = (props) => {
             <Button>
               <ShuffleIcon height="12px" width="12px" />
             </Button>
-            <Button>
-              <ListIcon
-                height="12px"
-                width="12px"
-                onClick={() => onClickIcon("flags")}
-              />
+            <Button onClick={() => onClickIcon("flags")}>
+              <ListIcon height="12px" width="12px" />
             </Button>
           </Buttons>
         </OptionBox>

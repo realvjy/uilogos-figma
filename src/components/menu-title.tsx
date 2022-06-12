@@ -3,14 +3,15 @@ import styled from "styled-components";
 import { BackIcon } from "./icons";
 import theme from "../theme";
 
-// interface Props {
-//   title: String;
-// }
+interface Props {
+  title: String;
+}
 
 const MentuTitle = (props) => {
   const onClickIcon = (event) => {
     props.parentCallback(event);
   };
+
   return (
     <NavBar className="menu-title">
       <span className="icon-box">

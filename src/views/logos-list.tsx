@@ -1,39 +1,44 @@
 import * as React from "react";
 
 import styled from "styled-components";
-import MenuTitle from "../../components/menu-title";
-import ImageGrid from "../../components/image-grid";
+import MenuTitle from "../components/menu-title";
+import ImageGrid from "../components/image-grid";
 
-const CountryFlag = (props) => {
+const LogoList = (props) => {
   const flags = props.logoData;
+  const canvasRef = React.useRef(null);
+  const imgRef = React.useRef(null);
+
   const handleCallback = (childData) => {
     props.parentCallback(childData);
   };
   return (
     <ContentPanel id="color-logotype">
-      <MenuTitle title="Country Flags" parentCallback={handleCallback} />
+      <MenuTitle title={props.title} parentCallback={handleCallback} />
 
-      <ImageContainer className="grid-4">
+      <ImageContainer className={props.class}>
         {flags.map((flag, i) => {
           return (
             <ImageGrid
               name={flag.Name}
               url={flag.URL}
-              keyword={"icon.keywords"}
+              keyword={"na"}
               key={flag.Name}
               color={"color"}
-              type={"flags"}
-              imgRef={"imgRef"}
-              canRef={"canvasRef"}
+              type={props.title}
+              imgRef={imgRef}
+              canRef={canvasRef}
             />
           );
         })}
       </ImageContainer>
+      <canvas ref={canvasRef} style={{ display: "none" }} />
+      <img ref={imgRef} style={{ display: "none" }} />
     </ContentPanel>
   );
 };
 
-export default CountryFlag;
+export default LogoList;
 
 const ContentPanel = styled.div`
   display: block;

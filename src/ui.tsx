@@ -3,20 +3,15 @@ import * as ReactDOM from "react-dom";
 
 import Footer from "./components/footer";
 import Home from "./views/home";
-import ColorLogomark from "./views/ColorLogomark";
-import BlackLogomark from "./views/BlackLogomark";
-import ColorLogotype from "./views/ColorLogotype";
-import BlackLogotype from "./views/BlackLogotype";
-import CountryFlag from "./views/CountryFlag";
-
 import "./ui.css";
+import LogoList from "./views/logos-list";
 
 declare function require(path: string): any;
 
 const App = (props) => {
   const [currentPage, setCurrentPage] = React.useState("home");
-  const handleCallback = (childData) => {
-    setCurrentPage(childData);
+  const handleCallback = (pageType) => {
+    setCurrentPage(pageType);
   };
   const [uiLogos, setUILogos] = React.useState([]);
 
@@ -57,54 +52,56 @@ const App = (props) => {
       "*"
     );
   }
-  // useWindowResize(onWindowResize, {
-  //   minWidth: 120,
-  //   minHeight: 120,
-  //   maxWidth: 1024,
-  //   maxHeight: 1024,
-  // });
 
   const renderPage = () => {
     switch (currentPage) {
       default:
       case "home":
-        // return <ColorLogomark logoData={logoMarkColor} />;
-        // return <BlackLogomark logoData={logoMarkBW} />;
-        // return <ColorLogotype logoData={fullLogosColor} />;
-        // return <BlackLogotype logoData={fullLogosBW} />;
-        // return <CountryFlag logoData={flags} />;
         return <Home parentCallback={handleCallback} />;
       case "colorlogotype":
         return (
-          <ColorLogotype
+          <LogoList
+            class={"grid-3 logotype"}
+            title={"Color Logotype"}
             logoData={fullLogosColor}
             parentCallback={handleCallback}
           />
         );
       case "blacklogotype":
         return (
-          <ColorLogotype
+          <LogoList
+            class={"grid-3 logotype"}
+            title={"B/W Logotype"}
             logoData={fullLogosBW}
             parentCallback={handleCallback}
           />
         );
       case "colorlogomark":
         return (
-          <ColorLogotype
+          <LogoList
+            class={"grid-4"}
+            title={"Color Logomark"}
             logoData={logoMarkColor}
             parentCallback={handleCallback}
           />
         );
       case "blacklogomark":
         return (
-          <ColorLogotype
+          <LogoList
+            class={"grid-4"}
+            title={"B/W Logomark"}
             logoData={logoMarkBW}
             parentCallback={handleCallback}
           />
         );
       case "flags":
         return (
-          <ColorLogotype logoData={flags} parentCallback={handleCallback} />
+          <LogoList
+            class={"grid-4"}
+            title={"Country Flags"}
+            logoData={flags}
+            parentCallback={handleCallback}
+          />
         );
     }
   };
