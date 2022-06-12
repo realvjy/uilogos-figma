@@ -36,6 +36,7 @@ const NavBar = styled.div`
   font-size: 13px;
   font-weight: 600;
   position: sticky;
+  z-index: 1;
   top: 0;
   border-bottom: 1px solid var(--figma-color-border);
   input {

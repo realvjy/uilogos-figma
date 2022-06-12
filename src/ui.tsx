@@ -57,7 +57,18 @@ const App = (props) => {
     switch (currentPage) {
       default:
       case "home":
-        return <Home parentCallback={handleCallback} />;
+        return (
+          <Home
+            parentCallback={handleCallback}
+            logoData={{
+              fullLogosBW: fullLogosBW,
+              fullLogosColor: fullLogosColor,
+              logoMarkBW: logoMarkBW,
+              logoMarkColor: logoMarkColor,
+              flags: flags,
+            }}
+          />
+        );
       case "colorlogotype":
         return (
           <LogoList

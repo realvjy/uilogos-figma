@@ -46,7 +46,7 @@ const ContentPanel = styled.div`
 
 const ImageContainer = styled.div`
   display: grid;
-
+  z-index: -1;
   grid-gap: 6px;
   padding: 8px;
   margin-bottom: 40px;

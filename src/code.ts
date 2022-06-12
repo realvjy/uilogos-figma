@@ -1,5 +1,7 @@
 // This plugin will add uilogos from uilogos.co to your artboard
 
+import { shuffle } from "./components/helpers";
+
 // Show the plugin UI
 figma.showUI(__html__, {
     width: 275,
@@ -19,10 +21,15 @@ figma.ui.onmessage = (msg) => {
         return;
     }
     
+
     
-    
+    const myArray = ['Jack', 'Mary', 'John', 'Krish', 'Navin'];  
+    // shuffle(msg.type.data);
     if (msg.type === 'set-bg') {
+        
         const newBytes: Uint8Array = msg.data.newBytes;
+        console.log(newBytes);
+        
         let node = figma.currentPage.selection[0];
         if (!node) {
           node = figma.createRectangle();
@@ -60,11 +67,11 @@ figma.ui.onmessage = (msg) => {
         }
         //@ts-ignore
         node.fills = newFills
-        console.log(figma.viewport.center.x, figma.viewport.center.y );
+        // console.log(figma.viewport.center.x, figma.viewport.center.y );
     
         figma.currentPage.selection = [node];
     
-        figma.notify('3dicons/'+msg.icoName + ' added' );
+        figma.notify(msg.icoName + ' added from uiLogos' );
     
         return;
     }

@@ -4,6 +4,7 @@
 
 import * as React from "react";
 import styled from "styled-components";
+import { encodeFigma, getImageData, loadImage, setBg } from "./helpers";
 
 interface ImageGridProps {
   name: string;
@@ -13,48 +14,6 @@ interface ImageGridProps {
   type: string;
   imgRef: any;
   canRef: any;
-}
-
-// Get image and return image data to add on figma
-const getImageData = (image, canvasRef) => {
-  const canvas = canvasRef.current;
-  canvas.width = image.width;
-  canvas.height = image.height;
-  const context = canvas.getContext("2d");
-  context.drawImage(image, 0, 0);
-  return {
-    imageData: context.getImageData(0, 0, image.width, image.height),
-    canvas,
-    context,
-  };
-};
-
-// Load image from the view
-const loadImage = async (src, imgRef) =>
-  new Promise((resolve, reject) => {
-    console.log(src, "here");
-
-    const img = imgRef.current;
-    img.crossOrigin = "anonymous";
-    img.onload = () => resolve(img);
-    img.onerror = (...args) => reject(args);
-    img.src = src + "?new-icon";
-    console.log(img.src);
-  });
-
-// Encode image to object to upload on figma
-async function encodeFigma(canvas, ctx, imageData) {
-  ctx.putImageData(imageData, 0, 0);
-
-  return await new Promise((resolve, reject) => {
-    canvas.toBlob((blob) => {
-      const reader = new FileReader();
-      //@ts-ignore
-      reader.onload = () => resolve(new Uint8Array(reader.result));
-      reader.onerror = () => reject(new Error("Could not read from blob"));
-      reader.readAsArrayBuffer(blob);
-    });
-  });
 }
 
 function ImageGrid({
@@ -74,34 +33,12 @@ function ImageGrid({
   }`;
   const sufix = `${name}.png?new_icon`;
 
-  const setBg = async () => {
-    console.log("inside setBG");
-    console.log(url);
-
-    const image = await loadImage(`${url}`, imgRef);
-
-    const { imageData, canvas, context } = getImageData(image, canRef);
-
-    const newBytes = await encodeFigma(canvas, context, imageData);
-
-    parent.postMessage(
-      {
-        pluginMessage: {
-          type: "set-bg",
-          icoName: name,
-          data: { newBytes },
-        },
-      },
-      "*"
-    );
-  };
-
   return (
     <ImageWrap>
       <Button
         key={name}
         onClick={() => {
-          setBg();
+          setBg(name, url, imgRef, canRef);
         }}
         className={`${type === "Country Flags" ? "flag" : ""}`}
       >
