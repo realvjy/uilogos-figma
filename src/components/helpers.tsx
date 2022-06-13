@@ -22,7 +22,6 @@ export const loadImage = async (src, imgRef) =>
     img.onload = () => resolve(img);
     img.onerror = (...args) => reject(args);
     img.src = src + "?new-icon";
-    console.log(img.src);
   });
 
 // Encode image to object to upload on figma
@@ -51,6 +50,9 @@ export const setBg = async (name, url, imgRef, canRef) => {
 
   const { imageData, canvas, context } = getImageData(image, canRef);
 
+  console.log(imageData.height, imageData.width);
+  const height = imageData.height;
+  const width = imageData.width;
   const newBytes = await encodeFigma(canvas, context, imageData);
 
   parent.postMessage(
@@ -59,6 +61,7 @@ export const setBg = async (name, url, imgRef, canRef) => {
         type: "set-bg",
         icoName: name,
         data: { newBytes },
+        imgSize: { height, width },
       },
     },
     "*"
@@ -123,3 +126,46 @@ export function getFrameSize(originalSize, selectedLayer) {
 
   // return CGRectMake(newX, newY, newWidth, newHeight);
 }
+
+export const fillWithImage = (newBytes, ratio, node) => {
+  if (!node) {
+    node = figma.createRectangle();
+    node.resize(800, 800);
+    node.x = Math.round(figma.viewport.center.x - node.width / 2);
+    node.y = Math.round(figma.viewport.center.y - node.height / 2);
+  }
+
+  const newFills = [];
+  //@ts-ignore
+  for (const paint of node.fills) {
+    const newPaint = JSON.parse(JSON.stringify(paint));
+    newPaint.blendMode = "NORMAL";
+    newPaint.filters = {
+      contrast: 0,
+      exposure: 0,
+      highlights: 0,
+      saturation: 0,
+      shadows: 0,
+      temperature: 0,
+      tint: 0,
+    };
+    newPaint.imageTransform = [
+      [1, 0, 0],
+      [0, 1, 0],
+    ];
+    newPaint.opacity = 1;
+    newPaint.scaleMode = "FILL";
+    newPaint.scalingFactor = 0.5;
+    newPaint.visible = true;
+    newPaint.type = "IMAGE";
+    delete newPaint.color;
+    newPaint.imageHash = figma.createImage(newBytes).hash;
+    newFills.push(newPaint);
+  }
+  //@ts-ignore
+
+  node.fills = newFills;
+  // console.log(figma.viewport.center.x, figma.viewport.center.y );
+
+  figma.currentPage.selection = [node];
+};
