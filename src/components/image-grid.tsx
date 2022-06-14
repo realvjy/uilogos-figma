@@ -4,7 +4,7 @@
 
 import * as React from "react";
 import styled from "styled-components";
-import { encodeFigma, getImageData, loadImage, setBg } from "./helpers";
+import { setBg } from "./helpers";
 
 interface ImageGridProps {
   name: string;

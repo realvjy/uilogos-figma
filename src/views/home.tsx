@@ -17,6 +17,8 @@ import { getLogos } from "../components/helpers";
 declare function require(path: string): any;
 
 const Home = (props) => {
+  const canvasRef = React.useRef(null);
+  const imgRef = React.useRef(null);
   // Call event to fake routing and swith to list view
   const onClickIcon = (event) => {
     props.parentCallback(event);
@@ -26,13 +28,21 @@ const Home = (props) => {
     <>
       <HomeMenu>
         <OptionBox>
-          <Title onClick={() => getLogos(props.logoData.fullLogosColor)}>
+          <Title
+            onClick={() =>
+              getLogos(props.logoData.fullLogosColor, imgRef, canvasRef)
+            }
+          >
             <ColorTypeIcon height="36px" width="36px" className="lefticon" />
             <p>Color Logotype</p>
           </Title>
           <Buttons>
             <li>
-              <Button onClick={() => getLogos(props.logoData.fullLogosColor)}>
+              <Button
+                onClick={() =>
+                  getLogos(props.logoData.fullLogosColor, imgRef, canvasRef)
+                }
+              >
                 <ShuffleIcon height="12px" width="12px" />
               </Button>
               <ToolTip className="r">
@@ -53,13 +63,21 @@ const Home = (props) => {
         </OptionBox>
 
         <OptionBox>
-          <Title onClick={() => getLogos(props.logoData.fullLogosBW)}>
+          <Title
+            onClick={() =>
+              getLogos(props.logoData.fullLogosBW, imgRef, canvasRef)
+            }
+          >
             <BlackTypeIcon height="36px" width="36px" className="lefticon" />
             <p>B/W Logotype</p>
           </Title>
           <Buttons>
             <li>
-              <Button onClick={() => getLogos(props.logoData.fullLogosBW)}>
+              <Button
+                onClick={() =>
+                  getLogos(props.logoData.fullLogosBW, imgRef, canvasRef)
+                }
+              >
                 <ShuffleIcon height="12px" width="12px" />
               </Button>
             </li>
@@ -72,13 +90,21 @@ const Home = (props) => {
         </OptionBox>
 
         <OptionBox>
-          <Title onClick={() => getLogos(props.logoData.logoMarkColor)}>
+          <Title
+            onClick={() =>
+              getLogos(props.logoData.logoMarkColor, imgRef, canvasRef)
+            }
+          >
             <ColorMarkIcon height="36px" width="36px" className="lefticon" />
             <p>Color Logomark</p>
           </Title>
           <Buttons>
             <li>
-              <Button onClick={() => getLogos(props.logoData.logoMarkColor)}>
+              <Button
+                onClick={() =>
+                  getLogos(props.logoData.logoMarkColor, imgRef, canvasRef)
+                }
+              >
                 <ShuffleIcon height="12px" width="12px" />
               </Button>
             </li>
@@ -91,13 +117,21 @@ const Home = (props) => {
         </OptionBox>
 
         <OptionBox>
-          <Title onClick={() => getLogos(props.logoData.logoMarkBW)}>
+          <Title
+            onClick={() =>
+              getLogos(props.logoData.logoMarkBW, imgRef, canvasRef)
+            }
+          >
             <BlackMarkIcon height="36px" width="36px" className="lefticon" />
             <p>B/W Logomark</p>
           </Title>
           <Buttons>
             <li>
-              <Button onClick={() => getLogos(props.logoData.logoMarkBW)}>
+              <Button
+                onClick={() =>
+                  getLogos(props.logoData.logoMarkBW, imgRef, canvasRef)
+                }
+              >
                 <ShuffleIcon height="12px" width="12px" />
               </Button>
             </li>
@@ -110,13 +144,19 @@ const Home = (props) => {
         </OptionBox>
 
         <OptionBox>
-          <Title onClick={() => getLogos(props.logoData.flags)}>
+          <Title
+            onClick={() => getLogos(props.logoData.flags, imgRef, canvasRef)}
+          >
             <FlagIcon height="36px" width="36px" className="lefticon" />
             <p>Country Flags</p>
           </Title>
           <Buttons>
             <li>
-              <Button onClick={() => getLogos(props.logoData.flags)}>
+              <Button
+                onClick={() =>
+                  getLogos(props.logoData.flags, imgRef, canvasRef)
+                }
+              >
                 <ShuffleIcon height="12px" width="12px" />
               </Button>
             </li>
@@ -128,6 +168,8 @@ const Home = (props) => {
           </Buttons>
         </OptionBox>
       </HomeMenu>
+      <canvas ref={canvasRef} style={{ display: "none" }} />
+      <img ref={imgRef} style={{ display: "none" }} />
       <Footer />
     </>
   );

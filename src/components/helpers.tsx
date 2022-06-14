@@ -1,6 +1,8 @@
 // Get image and return image data to add on figma
+
 export const getImageData = (image, canvasRef) => {
   const canvas = canvasRef.current;
+
   canvas.width = image.width;
   canvas.height = image.height;
   const context = canvas.getContext("2d");
@@ -15,13 +17,11 @@ export const getImageData = (image, canvasRef) => {
 // Load image from the view
 export const loadImage = async (src, imgRef) =>
   new Promise((resolve, reject) => {
-    console.log(src, "here");
-
     const img = imgRef.current;
     img.crossOrigin = "anonymous";
     img.onload = () => resolve(img);
     img.onerror = (...args) => reject(args);
-    img.src = src + "?new-icon";
+    img.src = src + "?uilogos";
   });
 
 // Encode image to object to upload on figma
@@ -40,17 +40,25 @@ export async function encodeFigma(canvas, ctx, imageData) {
 }
 
 // getLogos
-export const getLogos = (data) => {
+export const getLogos = async (data, imgRef, canRef) => {
+  console.log(data);
   shuffle(data);
   console.log(data);
+
+  let count = 4;
+  for (let i = 0; i < count; i++) {
+    console.log(data[i].URL, "something in loop");
+    await setBg("cool", data[i].URL, imgRef, canRef);
+  }
 };
 
+// Set Image on Figma convas
 export const setBg = async (name, url, imgRef, canRef) => {
   const image = await loadImage(`${url}`, imgRef);
+  console.log("insideSetBg");
 
   const { imageData, canvas, context } = getImageData(image, canRef);
 
-  console.log(imageData.height, imageData.width);
   const height = imageData.height;
   const width = imageData.width;
   const newBytes = await encodeFigma(canvas, context, imageData);
@@ -90,7 +98,7 @@ export const shuffle = (array) => {
 };
 
 // Frame Size for image repace
-export function getFrameSize(originalSize, selectedLayer) {
+export const getFrameSize = (w, h, node) => {
   // Default dimentions
   var newX = 0;
   var newY = 0;
@@ -98,45 +106,39 @@ export function getFrameSize(originalSize, selectedLayer) {
   var newHeight = 100;
 
   // // Decide the output frame dimension for reference
-  // if (isRectangleShape(selectedLayer) || isOvalShape(selectedLayer)) {
-  //   newX = selectedLayer.frame().x();
-  //   newY = selectedLayer.frame().y();
-  //   newWidth = selectedLayer.frame().width();
-  //   newHeight = selectedLayer.frame().height();
-  // }
-
-  // // // Decide the height and width
-  // var ratio = originalSize.height / originalSize.width;
-
-  // var newHeight = newHeight;
-  // var newWidth = newHeight / ratio;
-
-  // // Check for portrait logo
-  // if (newWidth > selectedLayer.width) {
-  //   newWidth = selectedLayer.height;
-  //   newHeight = newWidth * ratio;
-  // }
-
-  // // Decide location center align with shape
-  // var newX =
-  //   selectedLayer.frame().x() + (selectedLayer.frame().width() - newWidth) / 2;
-  // var newY =
-  //   selectedLayer.frame().y() +
-  //   (selectedLayer.frame().height() - newHeight) / 2;
-
-  // return CGRectMake(newX, newY, newWidth, newHeight);
-}
-
-export const fillWithImage = (newBytes, ratio, node) => {
-  if (!node) {
-    node = figma.createRectangle();
-    node.resize(800, 800);
-    node.x = Math.round(figma.viewport.center.x - node.width / 2);
-    node.y = Math.round(figma.viewport.center.y - node.height / 2);
+  if (node) {
+    newX = node.x;
+    newY = node.y;
+    newWidth = node.width;
+    newHeight = node.height;
   }
+
+  // // Decide the height and width
+  var ratio = h / w;
+
+  var newHeight = newHeight;
+  var newWidth = newHeight / ratio;
+
+  // Check for portrait logo
+  if (newWidth > node.width) {
+    newWidth = node.height;
+    newHeight = newWidth * ratio;
+  }
+
+  // Decide location center align with shape
+  newX = node.x + (node.width - newWidth) / 2;
+  newY = node.y + (node.height - newHeight) / 2;
+
+  return { newX, newY, newWidth, newHeight };
+};
+
+export const fillWithImage = (newBytes, w, h, ratio, node) => {
+  console.log("inside fill", node);
 
   const newFills = [];
   //@ts-ignore
+  node.resize(w, h);
+
   for (const paint of node.fills) {
     const newPaint = JSON.parse(JSON.stringify(paint));
     newPaint.blendMode = "NORMAL";
@@ -162,10 +164,8 @@ export const fillWithImage = (newBytes, ratio, node) => {
     newPaint.imageHash = figma.createImage(newBytes).hash;
     newFills.push(newPaint);
   }
-  //@ts-ignore
-
+  // //@ts-ignore
   node.fills = newFills;
-  // console.log(figma.viewport.center.x, figma.viewport.center.y );
 
-  figma.currentPage.selection = [node];
+  node = [node];
 };

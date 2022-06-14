@@ -1,6 +1,6 @@
 // This plugin will add uilogos from uilogos.co to your artboard
 
-import { fillWithImage, shuffle } from "./components/helpers";
+import { fillWithImage, getFrameSize, shuffle } from "./components/helpers";
 
 // Show the plugin UI
 figma.showUI(__html__, {
@@ -27,22 +27,48 @@ figma.ui.onmessage = (msg) => {
     if (msg.type === 'set-bg') {
         
         const newBytes: Uint8Array = msg.data.newBytes;
-        console.log(newBytes);
         
         let node = figma.currentPage.selection[0];
-        
         let totalSelection = figma.currentPage.selection.length;
+        let h = msg.imgSize.height;
+        let w = msg.imgSize.width;
 
-        if (totalSelection > 1) {
+
+        if (!node) {
+          //@ts-ignore
+          node = figma.createRectangle();
+          node.resize(msg.imgSize.width,msg.imgSize.height);
+          node.x = Math.round(figma.viewport.center.x - node.width / 2);
+          node.y = Math.round(figma.viewport.center.y - node.height / 2);
+          fillWithImage(newBytes, w, h, 1, node);
+        } else {
+          console.log(totalSelection);
+          const { newX, newY, newWidth, newHeight } = getFrameSize(w, h, node);
+        
           for (let i = 0; i < totalSelection; i++) {
+            
             let nodeN = figma.currentPage.selection[i]
-            fillWithImage(newBytes, 1, nodeN);
+            console.log(nodeN);
+            fillWithImage(newBytes, newWidth, newHeight, 1, nodeN);
+            
           }
         }
-        console.log(msg.imgSize.height);
-        console.log(msg.imgSize.width);
-        //@ts-ignore
-        node.resize(msg.imgSize.width,msg.imgSize.height);
+        
+        
+
+        
+
+        // if (totalSelection > 1) {
+        //   for (let i = 0; i < totalSelection; i++) {
+        //     console.log('inside loop');
+            
+        //     let nodeN = figma.currentPage.selection[i]
+        //     fillWithImage(newBytes, 1, nodeN);
+        //   }
+        // }
+        // console.log(msg.imgSize.height);
+        // console.log(msg.imgSize.width);
+        
 
       
 

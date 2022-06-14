@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import Footer from "./components/footer";
 import Home from "./views/home";
 import "./ui.css";
 import LogoList from "./views/logos-list";
@@ -10,10 +9,10 @@ declare function require(path: string): any;
 
 const App = (props) => {
   const [currentPage, setCurrentPage] = React.useState("home");
+
   const handleCallback = (pageType) => {
     setCurrentPage(pageType);
   };
-  const [uiLogos, setUILogos] = React.useState([]);
 
   const [fullLogosColor, setFullLogosColor] = React.useState([]);
   const [fullLogosBW, setFullLogosBW] = React.useState([]);
@@ -24,10 +23,12 @@ const App = (props) => {
   const [flags, setFlags] = React.useState([]);
 
   const uiLogosUrl = "https://uilogos.co/uilogos/uilogos.json";
+
   const fetchData = async () => {
     try {
       const response = await fetch(uiLogosUrl);
       const json = await response.json();
+      // Set logostypes
       setFullLogosColor(json.uilogos["full-logo"]["color"]);
       setFullLogosBW(json.uilogos["full-logo"]["black"]);
       setLogoMarkColor(json.uilogos["mark"]["color"]);

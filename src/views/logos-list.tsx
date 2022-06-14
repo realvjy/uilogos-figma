@@ -12,6 +12,7 @@ const LogoList = (props) => {
   const handleCallback = (childData) => {
     props.parentCallback(childData);
   };
+
   return (
     <ContentPanel id="color-logotype">
       <MenuTitle title={props.title} parentCallback={handleCallback} />
