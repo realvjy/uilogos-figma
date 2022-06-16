@@ -4,7 +4,7 @@
 
 import * as React from "react";
 import styled from "styled-components";
-import { setBg } from "./helpers";
+import { setBg, getLogo } from "./helpers";
 
 interface ImageGridProps {
   name: string;
@@ -38,7 +38,7 @@ function ImageGrid({
       <Button
         key={name}
         onClick={() => {
-          setBg(name, url, imgRef, canRef);
+          getLogo(name, url, imgRef, canRef);
         }}
         className={`${type === "Country Flags" ? "flag" : ""}`}
       >

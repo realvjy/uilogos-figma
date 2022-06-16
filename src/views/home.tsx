@@ -47,7 +47,7 @@ const Home = (props) => {
               </Button>
               <ToolTip className="r">
                 <div className="nib-r"></div>
-                <div className="text">shuffle</div>
+                <div className="text">Random</div>
               </ToolTip>
             </li>
             <li>
@@ -56,7 +56,7 @@ const Home = (props) => {
               </Button>
               <ToolTip className="r">
                 <div className="nib-r"></div>
-                <div className="text">view</div>
+                <div className="text">View</div>
               </ToolTip>
             </li>
           </Buttons>
@@ -148,7 +148,7 @@ const Home = (props) => {
             onClick={() => getLogos(props.logoData.flags, imgRef, canvasRef)}
           >
             <FlagIcon height="36px" width="36px" className="lefticon" />
-            <p>Country Flags</p>
+            <p>Country Flags </p>
           </Title>
           <Buttons>
             <li>

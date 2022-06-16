@@ -39,37 +39,98 @@ export async function encodeFigma(canvas, ctx, imageData) {
   });
 }
 
-// getLogos
-export const getLogos = async (data, imgRef, canRef) => {
-  console.log(data);
-  shuffle(data);
-  console.log(data);
+export const checkSelection = (logoCount) => {
+  console.log("inside check");
 
-  let count = 4;
-  for (let i = 0; i < count; i++) {
-    console.log(data[i].URL, "something in loop");
-    await setBg("cool", data[i].URL, imgRef, canRef);
-  }
+  //@ts-ignore
+  parent.postMessage(
+    {
+      pluginMessage: {
+        type: "get-all",
+        total: { logoCount },
+      },
+    },
+    "*"
+  );
+  onmessage = (event) => {
+    const selection = event.data.pluginMessage;
+    console.log(selection);
+  };
 };
 
-// Set Image on Figma convas
-export const setBg = async (name, url, imgRef, canRef) => {
-  const image = await loadImage(`${url}`, imgRef);
-  console.log("insideSetBg");
+// getLogos
+export const getLogos = async (data, imgRef, canRef) => {
+  shuffle(data);
 
+  //@ts-ignore
+  parent.postMessage(
+    {
+      pluginMessage: {
+        type: "check-selection",
+        total: { data },
+      },
+    },
+    "*"
+  );
+
+  onmessage = async (event) => {
+    var totalSelection = event.data.pluginMessage;
+    var newBytes = [];
+    if (totalSelection) {
+      for (let i = 0; i < totalSelection; i++) {
+        const image = await loadImage(`${data[i].URL}`, imgRef);
+
+        const { imageData, canvas, context } = getImageData(image, canRef);
+
+        const height = imageData.height;
+        const width = imageData.width;
+        const name = data[i].Name;
+
+        const imageEncoded = await encodeFigma(canvas, context, imageData);
+
+        let imgBytes = {
+          imgBytes: imageEncoded,
+          height: height,
+          width: width,
+          name: name,
+        };
+
+        newBytes.push(imgBytes);
+      }
+      setBg(newBytes);
+    }
+  };
+};
+
+// getLogos
+export const getLogo = async (name, url, imgRef, canRef) => {
+  const image = await loadImage(url, imgRef);
+  var newBytes = [];
   const { imageData, canvas, context } = getImageData(image, canRef);
 
   const height = imageData.height;
   const width = imageData.width;
-  const newBytes = await encodeFigma(canvas, context, imageData);
 
+  const imageEncoded = await encodeFigma(canvas, context, imageData);
+
+  let imgBytes = {
+    imgBytes: imageEncoded,
+    height: height,
+    width: width,
+    name: name,
+  };
+  newBytes.push(imgBytes);
+  console.log(newBytes);
+  setBg(newBytes);
+};
+
+// Set Image on Figma convas
+export const setBg = async (imageData) => {
   parent.postMessage(
     {
       pluginMessage: {
         type: "set-bg",
-        icoName: name,
-        data: { newBytes },
-        imgSize: { height, width },
+        data: { imageData },
       },
     },
     "*"
@@ -97,7 +158,11 @@ export const shuffle = (array) => {
   return array;
 };
 
-// Frame Size for image repace
+/**
+ * Resize Shape <Rectangle, Circle....> Node
+ * @param node, height, width
+ * return new X, Y, H, W
+ */
 export const getFrameSize = (w, h, node) => {
   // Default dimentions
   var newX = 0;
@@ -105,39 +170,34 @@ export const getFrameSize = (w, h, node) => {
   var newWidth = 100;
   var newHeight = 100;
 
+  console.log("frame in", h, w);
+
   // // Decide the output frame dimension for reference
-  if (node) {
-    newX = node.x;
-    newY = node.y;
-    newWidth = node.width;
-    newHeight = node.height;
-  }
+  newX = node.x;
+  newY = node.y;
+  newWidth = node.width;
+  newHeight = node.height;
 
   // // Decide the height and width
-  var ratio = h / w;
+  var ratio = w / h;
 
   var newHeight = newHeight;
-  var newWidth = newHeight / ratio;
+  var newWidth = newHeight * ratio;
 
-  // Check for portrait logo
-  if (newWidth > node.width) {
-    newWidth = node.height;
-    newHeight = newWidth * ratio;
-  }
-
-  // Decide location center align with shape
+  console.log("node h/w", newHeight, newWidth);
+  // // Decide location center align with shape
   newX = node.x + (node.width - newWidth) / 2;
   newY = node.y + (node.height - newHeight) / 2;
 
   return { newX, newY, newWidth, newHeight };
 };
 
-export const fillWithImage = (newBytes, w, h, ratio, node) => {
-  console.log("inside fill", node);
-
+export const fillWithImage = (newBytes, w, h, node) => {
   const newFills = [];
+
   //@ts-ignore
   node.resize(w, h);
+  console.log(w, h);
 
   for (const paint of node.fills) {
     const newPaint = JSON.parse(JSON.stringify(paint));

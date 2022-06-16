@@ -1,6 +1,6 @@
 // This plugin will add uilogos from uilogos.co to your artboard
 
-import { fillWithImage, getFrameSize, shuffle } from "./components/helpers";
+import { encodeFigma, fillWithImage, getFrameSize, getImageData, loadImage, shuffle } from "./components/helpers";
 
 // Show the plugin UI
 figma.showUI(__html__, {
@@ -21,99 +21,62 @@ figma.ui.onmessage = (msg) => {
         return;
     }
     
-
+    if (msg.type === 'check-selection') {
+      console.log('checking');
+      let count = figma.currentPage.selection.length;
+      if(count > 0){
+        figma.ui.postMessage(count)
+        return;
+      }
+      figma.notify('Select atleast one shape')
+      return;
+    }
     
-    // shuffle(msg.type.data);
     if (msg.type === 'set-bg') {
         
-        const newBytes: Uint8Array = msg.data.newBytes;
-        
-        let node = figma.currentPage.selection[0];
-        let totalSelection = figma.currentPage.selection.length;
-        let h = msg.imgSize.height;
-        let w = msg.imgSize.width;
+      // Playground
+      console.log(msg.data);
 
+      // Enode data
+
+      let node = figma.currentPage.selection[0];
+      let totalSelection = figma.currentPage.selection.length;
 
         if (!node) {
           //@ts-ignore
           node = figma.createRectangle();
-          node.resize(msg.imgSize.width,msg.imgSize.height);
+          const newBytes: Uint8Array = msg.data.imageData[0].imgBytes;
+          let name = msg.data.imageData[0].name;
+          let h = msg.data.imageData[0].height;
+          let w = msg.data.imageData[0].width;
+          node.resize(w,h);
+          node.name = name;
           node.x = Math.round(figma.viewport.center.x - node.width / 2);
           node.y = Math.round(figma.viewport.center.y - node.height / 2);
-          fillWithImage(newBytes, w, h, 1, node);
+          fillWithImage(newBytes, w, h,  node);
+          
+          figma.notify(' \' ' + name + '\' added from uiLogos' );
         } else {
           console.log(totalSelection);
-          const { newX, newY, newWidth, newHeight } = getFrameSize(w, h, node);
         
           for (let i = 0; i < totalSelection; i++) {
+            const newBytes: Uint8Array = msg.data.imageData[i].imgBytes;
+            let name = msg.data.imageData[i].name;
+            let h = msg.data.imageData[i].height;
+            let w = msg.data.imageData[i].width;
+            const { newX, newY, newWidth, newHeight } = getFrameSize(w, h, node);
             
             let nodeN = figma.currentPage.selection[i]
             console.log(nodeN);
-            fillWithImage(newBytes, newWidth, newHeight, 1, nodeN);
+            console.log(newBytes);
             
+            nodeN.name = name;
+            fillWithImage(newBytes, newWidth, newHeight,  nodeN);
           }
+          figma.notify(' \' ' + totalSelection + '\' logos added from uiLogos' );
         }
         
-        
-
-        
-
-        // if (totalSelection > 1) {
-        //   for (let i = 0; i < totalSelection; i++) {
-        //     console.log('inside loop');
-            
-        //     let nodeN = figma.currentPage.selection[i]
-        //     fillWithImage(newBytes, 1, nodeN);
-        //   }
-        // }
-        // console.log(msg.imgSize.height);
-        // console.log(msg.imgSize.width);
-        
-
-      
-
-        // if (!node) {
-        //   node = figma.createRectangle();
-        //   node.resize(800, 800)
-        //   node.x = Math.round(figma.viewport.center.x - node.width / 2);
-        //   node.y = Math.round(figma.viewport.center.y - node.height / 2);
-        // }
-        
-        // const newFills = []
-        // //@ts-ignore
-        // for (const paint of node.fills) {
-        //   const newPaint = JSON.parse(JSON.stringify(paint))
-        //   newPaint.blendMode = "NORMAL"
-        //   newPaint.filters = {
-        //     contrast: 0,
-        //     exposure: 0,
-        //     highlights: 0,
-        //     saturation: 0,
-        //     shadows: 0,
-        //     temperature: 0,
-        //     tint: 0,
-        //   }
-        //   newPaint.imageTransform = [
-        //     [1, 0, 0],
-        //     [0, 1, 0]
-        //   ]
-        //   newPaint.opacity = 1
-        //   newPaint.scaleMode = "FILL"
-        //   newPaint.scalingFactor = 0.5
-        //   newPaint.visible = true
-        //   newPaint.type = "IMAGE"
-        //   delete newPaint.color
-        //   newPaint.imageHash = figma.createImage(newBytes).hash
-        //   newFills.push(newPaint)
-        // }
-        // //@ts-ignore
-        
-        // node.fills = newFills
-        // // console.log(figma.viewport.center.x, figma.viewport.center.y );
-    
-        // figma.currentPage.selection = [node];
-        
-        figma.notify(msg.icoName + ' added from uiLogos' );
+       
     
         return;
     }
