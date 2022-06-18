@@ -40,8 +40,6 @@ export async function encodeFigma(canvas, ctx, imageData) {
 }
 
 export const checkSelection = (logoCount) => {
-  console.log("inside check");
-
   //@ts-ignore
   parent.postMessage(
     {
@@ -54,7 +52,6 @@ export const checkSelection = (logoCount) => {
   );
   onmessage = (event) => {
     const selection = event.data.pluginMessage;
-    console.log(selection);
   };
 };
 
@@ -97,12 +94,12 @@ export const getLogos = async (data, imgRef, canRef) => {
 
         newBytes.push(imgBytes);
       }
-      setBg(newBytes);
+      setBg(newBytes, "random");
     }
   };
 };
 
-// getLogos
+// getLogo single
 export const getLogo = async (name, url, imgRef, canRef) => {
   const image = await loadImage(url, imgRef);
   var newBytes = [];
@@ -120,17 +117,17 @@ export const getLogo = async (name, url, imgRef, canRef) => {
     name: name,
   };
   newBytes.push(imgBytes);
-  console.log(newBytes);
-  setBg(newBytes);
+  setBg(newBytes, "single");
 };
 
 // Set Image on Figma convas
-export const setBg = async (imageData) => {
+export const setBg = async (imageData, fillType) => {
   parent.postMessage(
     {
       pluginMessage: {
         type: "set-bg",
         data: { imageData },
+        fillType: fillType,
       },
     },
     "*"
@@ -170,8 +167,6 @@ export const getFrameSize = (w, h, node) => {
   var newWidth = 100;
   var newHeight = 100;
 
-  console.log("frame in", h, w);
-
   // // Decide the output frame dimension for reference
   newX = node.x;
   newY = node.y;
@@ -184,7 +179,6 @@ export const getFrameSize = (w, h, node) => {
   var newHeight = newHeight;
   var newWidth = newHeight * ratio;
 
-  console.log("node h/w", newHeight, newWidth);
   // // Decide location center align with shape
   newX = node.x + (node.width - newWidth) / 2;
   newY = node.y + (node.height - newHeight) / 2;
@@ -192,13 +186,18 @@ export const getFrameSize = (w, h, node) => {
   return { newX, newY, newWidth, newHeight };
 };
 
+// Fill node with Image
 export const fillWithImage = (newBytes, w, h, node) => {
   const newFills = [];
 
   //@ts-ignore
-  node.resize(w, h);
-  console.log(w, h);
+  //Fix errorr with Sticky resizing on figjam
+  if (node.type !== "STICKY") {
+    node.resize(w, h);
+  }
 
+  // //@ts-ignore
+  node.fills = [{ type: "SOLID", color: { r: 0.85, g: 0.85, b: 0.85 } }]; // create fill for non border
   for (const paint of node.fills) {
     const newPaint = JSON.parse(JSON.stringify(paint));
     newPaint.blendMode = "NORMAL";
@@ -228,4 +227,15 @@ export const fillWithImage = (newBytes, w, h, node) => {
   node.fills = newFills;
 
   node = [node];
+};
+
+// Fix Node Type Issue
+// Group Node and Section not work properly with fill
+export const checkNode = (node) => {
+  const type = node.type;
+
+  if (type === "GROUP" || type === "SECTION") {
+    return false;
+  }
+  return true;
 };

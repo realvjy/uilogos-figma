@@ -161,6 +161,11 @@ input:focus {
   min-height: 80px;
 }
 
+.logotype button img{
+  max-width: 62px;
+  max-height: 62px;
+}
+
 .show{
   display: block;
   visibility: visible;

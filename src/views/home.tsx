@@ -7,6 +7,7 @@ import { ListIcon, ShuffleIcon } from "../components/icons";
 import {
   BlackMarkIcon,
   BlackTypeIcon,
+  BrandIcon,
   ColorMarkIcon,
   ColorTypeIcon,
   FlagIcon,
@@ -142,7 +143,32 @@ const Home = (props) => {
             </li>
           </Buttons>
         </OptionBox>
-
+        <OptionBox>
+          <Title
+            onClick={() =>
+              getLogos(props.logoData.brandLogos, imgRef, canvasRef)
+            }
+          >
+            <BrandIcon height="36px" width="36px" className="lefticon" />
+            <p>Brand Logos</p>
+          </Title>
+          <Buttons>
+            <li>
+              <Button
+                onClick={() =>
+                  getLogos(props.logoData.brandLogos, imgRef, canvasRef)
+                }
+              >
+                <ShuffleIcon height="12px" width="12px" />
+              </Button>
+            </li>
+            <li>
+              <Button onClick={() => onClickIcon("brandlogos")}>
+                <ListIcon height="12px" width="12px" />
+              </Button>
+            </li>
+          </Buttons>
+        </OptionBox>
         <OptionBox>
           <Title
             onClick={() => getLogos(props.logoData.flags, imgRef, canvasRef)}

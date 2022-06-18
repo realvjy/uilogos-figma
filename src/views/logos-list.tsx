@@ -5,7 +5,7 @@ import MenuTitle from "../components/menu-title";
 import ImageGrid from "../components/image-grid";
 
 const LogoList = (props) => {
-  const flags = props.logoData;
+  const logos = props.logoData;
   const canvasRef = React.useRef(null);
   const imgRef = React.useRef(null);
 
@@ -18,13 +18,13 @@ const LogoList = (props) => {
       <MenuTitle title={props.title} parentCallback={handleCallback} />
 
       <ImageContainer className={props.class}>
-        {flags.map((flag, i) => {
+        {logos.map((logo, i) => {
           return (
             <ImageGrid
-              name={flag.Name}
-              url={flag.URL}
+              name={logo.Name}
+              url={logo.URL}
               keyword={"na"}
-              key={flag.Name}
+              key={`${logo.Name}-${logo.id}`}
               color={"color"}
               type={props.title}
               imgRef={imgRef}

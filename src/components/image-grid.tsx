@@ -1,6 +1,6 @@
 // Image-grid.tsx
 // Create view and setup canvas/image reference to add on figma canvas
-// 11-June-2022
+// Created: 11-June-2022
 
 import * as React from "react";
 import styled from "styled-components";
@@ -25,9 +25,6 @@ function ImageGrid({
   imgRef,
   canRef,
 }: ImageGridProps) {
-  // const canvasRef = React.useRef(null);
-  // const imgRef = React.useRef(null);
-  //   const imageKitPrefix = `https://ik.imagekit.io/3dicons/tr:w-100,h-100/v1/${angle}/${color}/`; // For view optimized 100px
   const prefix = `https://uilogos.co/uilogos/${type}/${
     type === "flags" ? "" : color + "/"
   }`;
@@ -42,7 +39,7 @@ function ImageGrid({
         }}
         className={`${type === "Country Flags" ? "flag" : ""}`}
       >
-        <img src={url} alt="" width="100%" />
+        <img src={url} alt="" />
       </Button>
       <div className={`${type === "Country Flags" ? "show" : "hide"}`}>
         {name}
@@ -70,6 +67,10 @@ const Button = styled.button`
   -moz-appearance: none;
   appearance: none;
   outline: 0;
+  img {
+    max-width: 62px;
+    max-height: 62px;
+  }
   :hover {
     border: 1px solid var(--figma-color-border-brand);
     img {
@@ -79,6 +80,7 @@ const Button = styled.button`
   &.flag {
     padding: 0;
     img {
+      width: 100% !important;
       border-radius: 3px;
     }
   }

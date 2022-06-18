@@ -21,6 +21,7 @@ const App = (props) => {
   const [logoMarkBW, setLogoMarkBW] = React.useState([]);
 
   const [flags, setFlags] = React.useState([]);
+  const [brandLogos, setBrandLogos] = React.useState([]);
 
   const uiLogosUrl = "https://uilogos.co/uilogos/uilogos.json";
 
@@ -28,11 +29,13 @@ const App = (props) => {
     try {
       const response = await fetch(uiLogosUrl);
       const json = await response.json();
+
       // Set logostypes
       setFullLogosColor(json.uilogos["full-logo"]["color"]);
       setFullLogosBW(json.uilogos["full-logo"]["black"]);
       setLogoMarkColor(json.uilogos["mark"]["color"]);
       setLogoMarkBW(json.uilogos["mark"]["black"]);
+      setBrandLogos(json.uilogos["brand"]["color"]);
       setFlags(json.uilogos["flags"]["all-flags"]);
     } catch (error) {
       console.log("error", error);
@@ -67,6 +70,7 @@ const App = (props) => {
               logoMarkBW: logoMarkBW,
               logoMarkColor: logoMarkColor,
               flags: flags,
+              brandLogos: brandLogos,
             }}
           />
         );
@@ -103,6 +107,15 @@ const App = (props) => {
             class={"grid-4"}
             title={"B/W Logomark"}
             logoData={logoMarkBW}
+            parentCallback={handleCallback}
+          />
+        );
+      case "brandlogos":
+        return (
+          <LogoList
+            class={"grid-3 logotype"}
+            title={"Brand Logos"}
+            logoData={brandLogos}
             parentCallback={handleCallback}
           />
         );
