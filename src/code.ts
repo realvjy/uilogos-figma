@@ -1,7 +1,7 @@
 // This plugin will add uilogos from uilogos.co to your artboard
 // Update: 19 Jun 2022
 
-import { checkNode, encodeFigma, fillWithImage, getFrameSize, getImageData, loadImage, shuffle } from "./components/helpers";
+import { checkNode, fillWithImage, getFrameSize } from "./components/helpers";
 
 // Show the plugin UI
 figma.showUI(__html__, {
@@ -14,23 +14,24 @@ figma.showUI(__html__, {
 
 console.log('uilogos running...');
 
-//  Message received
 figma.ui.onmessage = (msg) => {
 
-    
     if (msg.type === 'check-selection') {
      
       let count = figma.currentPage.selection.length;
-
+      let dataCount = msg.total.data.length;
       if(count > 0){
-        let type = figma.currentPage.selection[0].type;
         // Fixed errror for group and section node
-
         if(checkNode(figma.currentPage.selection[0])){
-          figma.notify('⌛️ loading...', {timeout:1500});
-          console.log('⌛️ loading...');
-          figma.ui.postMessage(count)
-          return;
+          if(dataCount >= count){
+            figma.notify('⌛️ loading...');
+            console.log('⌛️ loading...');
+            figma.ui.postMessage(count)
+            return;
+          } else {
+            figma.notify('🚨 Select max '+dataCount+ ' shape(s) or vector(s)', {timeout:1500})
+            return;
+          }
         }
       }
       figma.notify('🚨 Select any shape(s) [Rectangle, Ellipse, Star, Line or Any Vector(s)]', {timeout:1500})
@@ -65,8 +66,7 @@ figma.ui.onmessage = (msg) => {
             figma.notify(totalSelection + ' logos added from uiLogos', {timeout:1200});
             return;
           } catch (error) {
-            console.log(error);
-            
+            console.log('Not worked for section node and group');
           }
 
         }
@@ -75,11 +75,6 @@ figma.ui.onmessage = (msg) => {
           let name = msg.data.imageData[0].name;
           let h = msg.data.imageData[0].height;
           let w = msg.data.imageData[0].width;
-          try {
-
-          } catch (error) {
-            console.log(error);
-          }
           if (!node) {
             //@ts-ignore
             node = figma.createRectangle();
@@ -100,7 +95,7 @@ figma.ui.onmessage = (msg) => {
             //@ts-ignore
             if(!checkNode(figma.currentPage.selection[i])){
               // Fixed error for section error and group
-                figma.notify('🚨 Not worked for section and group. Select and shape or vector(s)', {timeout:1200});
+                figma.notify('🚨 Not worked for section and group. Select any shape or vector(s)', {timeout:1200});
                 return;
             }
 

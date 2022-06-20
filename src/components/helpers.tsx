@@ -134,7 +134,7 @@ export const setBg = async (imageData, fillType) => {
   );
 };
 
-// Shuffle arrary
+// Shuffle arrary (logo data)
 export const shuffle = (array) => {
   var currentIndex = array.length;
   var tempValue = 0;

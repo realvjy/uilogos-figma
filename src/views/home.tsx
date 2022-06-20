@@ -1,7 +1,5 @@
 import * as React from "react";
 
-import theme from "../theme";
-
 import styled from "styled-components";
 import { ListIcon, ShuffleIcon } from "../components/icons";
 import {

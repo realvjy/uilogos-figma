@@ -4,7 +4,7 @@
 
 import * as React from "react";
 import styled from "styled-components";
-import { setBg, getLogo } from "./helpers";
+import { getLogo } from "./helpers";
 
 interface ImageGridProps {
   name: string;

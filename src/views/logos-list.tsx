@@ -24,7 +24,7 @@ const LogoList = (props) => {
               name={logo.Name}
               url={logo.URL}
               keyword={"na"}
-              key={`${logo.Name}-${logo.id}`}
+              key={`${logo.Name}-${logo.id}-${i}`}
               color={"color"}
               type={props.title}
               imgRef={imgRef}
