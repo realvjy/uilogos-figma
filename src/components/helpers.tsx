@@ -188,7 +188,19 @@ export const getFrameSize = (w, h, node) => {
 
 // Fill node with Image
 export const fillWithImage = (newBytes, w, h, node) => {
-  const newFills = [];
+  const newFills = [
+    {
+      type: "IMAGE",
+      opacity: 1,
+      scaleMode: "FILL",
+      blendMode: "NORMAL",
+      imageTransform: [
+        [1, 0, 0],
+        [0, 1, 0],
+      ],
+      imageHash: figma.createImage(newBytes).hash,
+    },
+  ];
 
   //@ts-ignore
   //Fix errorr with Sticky resizing on figjam
@@ -198,31 +210,7 @@ export const fillWithImage = (newBytes, w, h, node) => {
 
   // //@ts-ignore
   node.fills = [{ type: "SOLID", color: { r: 0.85, g: 0.85, b: 0.85 } }]; // create fill for non border
-  for (const paint of node.fills) {
-    const newPaint = JSON.parse(JSON.stringify(paint));
-    newPaint.blendMode = "NORMAL";
-    newPaint.filters = {
-      contrast: 0,
-      exposure: 0,
-      highlights: 0,
-      saturation: 0,
-      shadows: 0,
-      temperature: 0,
-      tint: 0,
-    };
-    newPaint.imageTransform = [
-      [1, 0, 0],
-      [0, 1, 0],
-    ];
-    newPaint.opacity = 1;
-    newPaint.scaleMode = "FILL";
-    newPaint.scalingFactor = 0.5;
-    newPaint.visible = true;
-    newPaint.type = "IMAGE";
-    delete newPaint.color;
-    newPaint.imageHash = figma.createImage(newBytes).hash;
-    newFills.push(newPaint);
-  }
+
   // //@ts-ignore
   node.fills = newFills;
 
