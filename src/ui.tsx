@@ -4,6 +4,7 @@ import * as ReactDOM from "react-dom";
 import Home from "./views/home";
 import "./ui.css";
 import LogoList from "./views/logos-list";
+import JSONConverter from "./utils/JSONConverter";
 
 declare function require(path: string): any;
 
@@ -64,17 +65,7 @@ const App = (props) => {
       default:
       case "home":
         return (
-          <Home
-            parentCallback={handleCallback}
-            logoData={{
-              fullLogosBW: fullLogosBW,
-              fullLogosColor: fullLogosColor,
-              logoMarkBW: logoMarkBW,
-              logoMarkColor: logoMarkColor,
-              flags: flags,
-              brandLogos: brandLogos,
-            }}
-          />
+          <Home />
         );
       case "colorlogotype":
         return (

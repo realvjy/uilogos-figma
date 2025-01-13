@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { ListIcon, ShuffleIcon } from "../components/icons";
 import {
@@ -12,195 +12,185 @@ import {
 } from "../components/logos-icons";
 import Footer from "../components/footer";
 import { getLogos } from "../components/helpers";
+import { getAllPngUrls } from "../utils/uiLogosHelper";
+import ImageGrid from "../components/image-grid";
+import Fuse from "fuse.js";
 
 declare function require(path: string): any;
 
 const Home = (props) => {
   const canvasRef = React.useRef(null);
   const imgRef = React.useRef(null);
-  // Call event to fake routing and swith to list view
+  const apiUrl = 'https://uilogos.co/uilogos/uilogos-v2.json'
+  const [selectedCategory, setSelectedCategory] = useState('logos');
+  const [selectedTag, setSelectedTag] = useState('color');
+  const [selectedCategories, setSelectedCategories] = useState(['all']);
+  const [selectedTags, setSelectedTags] = useState(['all']);
+  const [displayItems, setDisplayItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+
   const onClickIcon = (event) => {
     props.parentCallback(event);
   };
 
+  const [jsonData, setJsonData] = useState(null);
+
+  // First effect remains largely the same
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const parsed = await response.json();
+        setJsonData(parsed);
+        const allItems = getAllPngUrls(parsed);
+        setDisplayItems(allItems);
+        setResults(allItems);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [apiUrl]);
+
+  // Modified second effect for multiple filters
+  useEffect(() => {
+    if (!jsonData) return;
+
+    let filtered = getAllPngUrls(jsonData);
+
+    // Handle multiple categories
+    if (!selectedCategories.includes('all')) {
+      filtered = filtered.filter(item => selectedCategories.includes(item.category));
+    }
+
+    // Handle multiple tags
+    if (!selectedTags.includes('all')) {
+      filtered = filtered.filter(item => selectedTags.includes(item.variant));
+    }
+
+    setDisplayItems(filtered);
+    if (!query.trim()) {
+      setResults(filtered);
+    }
+  }, [selectedCategories, selectedTags, jsonData, query]);
+
+  const categories = ['all', 'logos', 'brands', 'flags'];
+  const tags = ['all', 'color', 'bw', 'original', 'square', 'text', 'mark'];
+  // Setup Fuse search
+  // Third effect stays the same
+  useEffect(() => {
+    const fuse = new Fuse(displayItems, {
+      threshold: 0.2,
+      keys: ["name", "category", "variant"]
+    });
+
+    if (query.trim()) {
+      const searchData = fuse.search(query.trim());
+      setResults(searchData.map((result) => result.item));
+    } else {
+      setResults(displayItems);
+    }
+  }, [query, displayItems]);
+
+  // Add handlers for multiple selections
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const values = Array.from(
+      e.target.selectedOptions,
+      (option: HTMLOptionElement) => option.value
+    );
+    if (values.includes('all')) {
+      setSelectedCategories(['all']);
+    } else {
+      setSelectedCategories(values);
+    }
+  };
+
+  const handleTagChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const values = Array.from(
+      e.target.selectedOptions,
+      (option: HTMLOptionElement) => option.value
+    );
+    if (values.includes('all')) {
+      setSelectedTags(['all']);
+    } else {
+      setSelectedTags(values);
+    }
+  };
+
   return (
     <>
-      <HomeMenu>
-        <OptionBox>
-          <Title
-            onClick={() =>
-              getLogos(props.logoData.fullLogosColor, imgRef, canvasRef)
-            }
-          >
-            <ColorTypeIcon height="36px" width="36px" className="lefticon" />
-            <p>Color Logotype</p>
-          </Title>
-          <Buttons>
-            <li>
-              <Button
-                onClick={() =>
-                  getLogos(props.logoData.fullLogosColor, imgRef, canvasRef)
-                }
-              >
-                <ShuffleIcon height="12px" width="12px" />
-              </Button>
-              <ToolTip className="r">
-                <div className="nib-r"></div>
-                <div className="text">Random</div>
-              </ToolTip>
-            </li>
-            <li>
-              <Button onClick={() => onClickIcon("colorlogotype")}>
-                <ListIcon height="12px" width="12px" />
-              </Button>
-              <ToolTip className="r">
-                <div className="nib-r"></div>
-                <div className="text">View</div>
-              </ToolTip>
-            </li>
-          </Buttons>
-        </OptionBox>
+      <select
+        multiple
+        value={selectedCategories}
+        onChange={handleCategoryChange}
+        className="select-multiple"
+      >
+        {categories.map(category => (
+          <option key={category} value={category}>
+            {capitalize(category)}
+          </option>
+        ))}
+      </select>
 
-        <OptionBox>
-          <Title
-            onClick={() =>
-              getLogos(props.logoData.fullLogosBW, imgRef, canvasRef)
-            }
-          >
-            <BlackTypeIcon height="36px" width="36px" className="lefticon" />
-            <p>B/W Logotype</p>
-          </Title>
-          <Buttons>
-            <li>
-              <Button
-                onClick={() =>
-                  getLogos(props.logoData.fullLogosBW, imgRef, canvasRef)
-                }
-              >
-                <ShuffleIcon height="12px" width="12px" />
-              </Button>
-            </li>
-            <li>
-              <Button onClick={() => onClickIcon("blacklogotype")}>
-                <ListIcon height="12px" width="12px" />
-              </Button>
-            </li>
-          </Buttons>
-        </OptionBox>
-
-        <OptionBox>
-          <Title
-            onClick={() =>
-              getLogos(props.logoData.logoMarkColor, imgRef, canvasRef)
-            }
-          >
-            <ColorMarkIcon height="36px" width="36px" className="lefticon" />
-            <p>Color Logomark</p>
-          </Title>
-          <Buttons>
-            <li>
-              <Button
-                onClick={() =>
-                  getLogos(props.logoData.logoMarkColor, imgRef, canvasRef)
-                }
-              >
-                <ShuffleIcon height="12px" width="12px" />
-              </Button>
-            </li>
-            <li>
-              <Button onClick={() => onClickIcon("colorlogomark")}>
-                <ListIcon height="12px" width="12px" />
-              </Button>
-            </li>
-          </Buttons>
-        </OptionBox>
-
-        <OptionBox>
-          <Title
-            onClick={() =>
-              getLogos(props.logoData.logoMarkBW, imgRef, canvasRef)
-            }
-          >
-            <BlackMarkIcon height="36px" width="36px" className="lefticon" />
-            <p>B/W Logomark</p>
-          </Title>
-          <Buttons>
-            <li>
-              <Button
-                onClick={() =>
-                  getLogos(props.logoData.logoMarkBW, imgRef, canvasRef)
-                }
-              >
-                <ShuffleIcon height="12px" width="12px" />
-              </Button>
-            </li>
-            <li>
-              <Button onClick={() => onClickIcon("blacklogomark")}>
-                <ListIcon height="12px" width="12px" />
-              </Button>
-            </li>
-          </Buttons>
-        </OptionBox>
-        <OptionBox>
-          <Title
-            onClick={() =>
-              getLogos(props.logoData.brandLogos, imgRef, canvasRef)
-            }
-          >
-            <BrandIcon height="36px" width="36px" className="lefticon" />
-            <p>Brand Logos</p>
-          </Title>
-          <Buttons>
-            <li>
-              <Button
-                onClick={() =>
-                  getLogos(props.logoData.brandLogos, imgRef, canvasRef)
-                }
-              >
-                <ShuffleIcon height="12px" width="12px" />
-              </Button>
-            </li>
-            <li>
-              <Button onClick={() => onClickIcon("brandlogos")}>
-                <ListIcon height="12px" width="12px" />
-              </Button>
-            </li>
-          </Buttons>
-        </OptionBox>
-        <OptionBox>
-          <Title
-            onClick={() => getLogos(props.logoData.flags, imgRef, canvasRef)}
-          >
-            <FlagIcon height="36px" width="36px" className="lefticon" />
-            <p>Country Flags </p>
-          </Title>
-          <Buttons>
-            <li>
-              <Button
-                onClick={() =>
-                  getLogos(props.logoData.flags, imgRef, canvasRef)
-                }
-              >
-                <ShuffleIcon height="12px" width="12px" />
-              </Button>
-            </li>
-            <li>
-              <Button onClick={() => onClickIcon("flags")}>
-                <ListIcon height="12px" width="12px" />
-              </Button>
-            </li>
-          </Buttons>
-        </OptionBox>
-      </HomeMenu>
+      <select
+        multiple
+        value={selectedTags}
+        onChange={handleTagChange}
+        className="select-multiple"
+      >
+        {tags.map(tag => (
+          <option key={tag} value={tag}>
+            {capitalize(tag)}
+          </option>
+        ))}
+      </select>
+      <input
+        value={query}
+        type="text"
+        autoFocus={true}
+        className="inputSearch"
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder="Search from 120+ illlustrations..."
+      />
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <ImageContainer className={"grid-2"}>
+          {results.map((logo, i) => (
+            <ImageGrid
+              name={logo.name}
+              url={logo.url}
+              keyword={"na"}
+              key={`${logo.name}-${logo.id}-${i}`}
+              color={"color"}
+              type={props.title}
+              imgRef={imgRef}
+              canRef={canvasRef}
+            />
+          ))}
+        </ImageContainer>
+      )}
       <canvas ref={canvasRef} style={{ display: "none" }} />
       <img ref={imgRef} style={{ display: "none" }} />
-      <Footer />
     </>
   );
 };
 
 export default Home;
-
+const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
 const HomeMenu = styled.div`
   display: flex;
   flex-direction: column;
@@ -232,40 +222,8 @@ const Title = styled.div`
   }
 `;
 
-const Buttons = styled.ul`
-  padding: 8px 8px 8px 0;
-  display: flex;
-  margin: 0;
-  li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    > div {
-      display: none;
-    }
-    &:hover {
-      > div {
-        display: flex;
-      }
-    }
-  }
-`;
 
-const Button = styled.a`
-  line-height: normal;
-  padding: 12px;
-  opacity: 0.6;
-  border-radius: 2px;
-  display: block;
-  :hover {
-    background: var(--figma-color-bg-hover);
-    opacity: 1;
-  }
-  svg path {
-    fill: var(--svg-fill-color);
-  }
-`;
+
 
 const ToolTip = styled.div`
   z-index: 100;
@@ -317,5 +275,19 @@ const ToolTip = styled.div`
     justify-content: center;
     padding: 4px 8px;
     background-color: rgb(34, 34, 34);
+  }
+`;
+
+const ImageContainer = styled.div`
+  display: grid;
+  z-index: -1;
+  &.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  &.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;

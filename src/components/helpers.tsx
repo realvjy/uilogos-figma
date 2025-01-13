@@ -101,6 +101,9 @@ export const getLogos = async (data, imgRef, canRef) => {
 
 // getLogo single
 export const getLogo = async (name, url, imgRef, canRef) => {
+
+  console.log("what url", url);
+
   const image = await loadImage(url, imgRef);
   var newBytes = [];
   const { imageData, canvas, context } = getImageData(image, canRef);

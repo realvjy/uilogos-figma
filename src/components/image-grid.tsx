@@ -25,9 +25,8 @@ function ImageGrid({
   imgRef,
   canRef,
 }: ImageGridProps) {
-  const prefix = `https://uilogos.co/uilogos/${type}/${
-    type === "flags" ? "" : color + "/"
-  }`;
+  const prefix = `https://uilogos.co/uilogos/${type}/${type === "flags" ? "" : color + "/"
+    }`;
   const sufix = `${name}.png?new_icon`;
 
   return (
@@ -53,26 +52,28 @@ export default ImageGrid;
 const ImageWrap = styled.div`
   display: flex;
   flex-direction: column;
+  min-height: 110px;
 `;
 
 // Styling button as image
 const Button = styled.button`
   margin: 0;
   padding: 8px;
-  background-color: #ffffff;
-  border: 1px solid var(--figma-color-bg-secondary);
-  box-shadow: none;
-  border-radius: 8px;
+  border: 0;
+  background-color: white;
+  box-shadow: 0px 0px 0px 0.5px rgba(0, 0, 0, 0.25);
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  border-radius: 0;
   outline: 0;
+  height: 100%;
   img {
-    max-width: 62px;
-    max-height: 62px;
+    max-width: 40px;
+    max-height: 40px;
   }
   :hover {
-    border: 1px solid var(--figma-color-border-brand);
+    /* border: 1px solid var(--figma-color-border-brand); */
     img {
       opacity: 0.9;
     }
