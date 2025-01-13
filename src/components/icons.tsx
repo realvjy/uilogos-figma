@@ -48,6 +48,82 @@ export const ListIcon = ({
   </svg>
 );
 
+
+// arrow icon
+export const ArrowIcon = ({
+  height = "24px",
+  width = "24px",
+  secondaryColor,
+  ...props
+}: React.SVGProps<SVGSVGElement> & { secondaryColor?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    clipRule="evenodd"
+    fillRule="evenodd"
+    {...props}
+  >
+    <path d="M5.513 8.583a1 1 0 0 1 1.415 0l5.292 5.293 5.293-5.293a1 1 0 1 1 1.415 1.414l-6 6a1 1 0 0 1-1.415 0l-6-6a1 1 0 0 1 0-1.414"
+    />
+  </svg>
+);
+
+export const ColorDotIcon = ({
+  height = "12px",
+  width = "12px",
+  secondaryColor,
+  ...props
+}: React.SVGProps<SVGSVGElement> & { secondaryColor?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    viewBox="0 0 12 12"
+    clipRule="evenodd"
+    fillRule="evenodd"
+    {...props}
+  >
+    <circle cx="6" cy="6" r="6" fill="url(#paint0_linear_1244_1055)"></circle>
+    <defs>
+      <linearGradient
+        id="paint0_linear_1244_1055"
+        x1="6"
+        x2="6"
+        y1="0"
+        y2="12"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stopColor="#FFF374"></stop>
+        <stop offset="0.456" stopColor="#F50"></stop>
+        <stop offset="1" stopColor="#494CFF"></stop>
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
+export const BWDotIcon = ({
+  height = "12px",
+  width = "12px",
+  secondaryColor,
+  ...props
+}: React.SVGProps<SVGSVGElement> & { secondaryColor?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    viewBox="0 0 12 12"
+    clipRule="evenodd"
+    fillRule="evenodd"
+    {...props}
+  >
+    <path fill="#000" d="M12 6A6 6 0 1 1 0 6a6 6 0 0 1 12 0"></path>
+    <path fill="#fff" d="M6 11A5 5 0 0 0 6 1z"></path>
+  </svg>
+);
+
+
 // color icon
 export const BackIcon = ({
   width = "20",

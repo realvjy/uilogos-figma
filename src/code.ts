@@ -6,7 +6,7 @@ import { checkNode, fillWithImage, getFrameSize } from "./components/helpers";
 // Show the plugin UI
 figma.showUI(__html__, {
   width: 300,
-  height: 400,
+  height: 500,
   themeColors: true
 }
 );

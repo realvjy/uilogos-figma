@@ -1,17 +1,72 @@
 // Utility function to flatten all PNG URLs from the data
+interface LogoVariant {
+    color: string | null;
+    bw: string | null;
+}
+
+interface LogoItem {
+    id: string;
+    name: string;
+    variants: {
+        text?: LogoVariant;
+        mark?: LogoVariant;
+    };
+}
+
 export const getAllPngUrls = (data) => {
     const urls = [];
 
     // Process logos category
-    data.categories.logos.items.forEach(item => {
+    // Process logos category
+    data.categories.logos.items.forEach((item: LogoItem) => {
         const variants = item.variants;
+
+        // Handle text variants
         if (variants.text) {
-            if (variants.text.color) urls.push({ url: variants.text.color, category: 'logos', type: 'text', variant: 'color', name: item.name });
-            if (variants.text.bw) urls.push({ url: variants.text.bw, category: 'logos', type: 'text', variant: 'bw', name: item.name });
+            if (variants.text.color) {
+                urls.push({
+                    url: variants.text.color,
+                    category: 'logos',
+                    type: 'text',
+                    variant: 'color',
+                    name: item.name,
+                    id: item.id
+                });
+            }
+            if (variants.text.bw) {
+                urls.push({
+                    url: variants.text.bw,
+                    category: 'logos',
+                    type: 'text',
+                    variant: 'bw',
+                    name: item.name,
+                    id: item.id
+                });
+            }
         }
+
+        // Handle mark variants
         if (variants.mark) {
-            if (variants.mark.color) urls.push({ url: variants.mark.color, category: 'logos', type: 'mark', variant: 'color', name: item.name });
-            if (variants.mark.bw) urls.push({ url: variants.mark.bw, category: 'logos', type: 'mark', variant: 'bw', name: item.name });
+            if (variants.mark.color) {
+                urls.push({
+                    url: variants.mark.color,
+                    category: 'logos',
+                    type: 'mark',
+                    variant: 'color',
+                    name: item.name,
+                    id: item.id
+                });
+            }
+            if (variants.mark.bw) {
+                urls.push({
+                    url: variants.mark.bw,
+                    category: 'logos',
+                    type: 'mark',
+                    variant: 'bw',
+                    name: item.name,
+                    id: item.id
+                });
+            }
         }
     });
 

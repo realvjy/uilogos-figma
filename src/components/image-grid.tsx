@@ -52,7 +52,7 @@ export default ImageGrid;
 const ImageWrap = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 110px;
+  min-height: 100px;
 `;
 
 // Styling button as image
@@ -69,7 +69,7 @@ const Button = styled.button`
   outline: 0;
   height: 100%;
   img {
-    max-width: 40px;
+    max-width: 70px;
     max-height: 40px;
   }
   :hover {

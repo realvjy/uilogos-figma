@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import styled from "styled-components";
 import { ListIcon, ShuffleIcon } from "../components/icons";
 import {
@@ -15,6 +15,8 @@ import { getLogos } from "../components/helpers";
 import { getAllPngUrls } from "../utils/uiLogosHelper";
 import ImageGrid from "../components/image-grid";
 import Fuse from "fuse.js";
+import { TagButton, TagGroup } from "../components/TagButton";
+import { Dropdown } from "../components/Dropdown";
 
 declare function require(path: string): any;
 
@@ -24,7 +26,9 @@ const Home = (props) => {
   const apiUrl = 'https://uilogos.co/uilogos/uilogos-v2.json'
   const [selectedCategory, setSelectedCategory] = useState('logos');
   const [selectedTag, setSelectedTag] = useState('color');
-  const [selectedCategories, setSelectedCategories] = useState(['all']);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(['logos']);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(['mark']); // For text/mark
+  const [selectedVariants, setSelectedVariants] = useState<string[]>(['color']); // For color/bw
   const [selectedTags, setSelectedTags] = useState(['all']);
   const [displayItems, setDisplayItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,6 +41,19 @@ const Home = (props) => {
   };
 
   const [jsonData, setJsonData] = useState(null);
+
+  // Get available types and variants from the data
+  const getAvailableFilters = (data: any) => {
+    if (!data?.categories?.logos?.tags) return { types: [], variants: [] };
+
+    const tags = data.categories.logos.tags;
+    const types = tags.filter((tag: string) => ['text', 'mark'].includes(tag));
+    const variants = tags.filter((tag: string) => ['color', 'bw'].includes(tag));
+
+    return { types, variants };
+  };
+
+
 
   // First effect remains largely the same
   useEffect(() => {
@@ -69,23 +86,28 @@ const Home = (props) => {
 
     let filtered = getAllPngUrls(jsonData);
 
-    // Handle multiple categories
-    if (!selectedCategories.includes('all')) {
-      filtered = filtered.filter(item => selectedCategories.includes(item.category));
+    // Filter by single selected category
+    if (selectedCategory) {
+      filtered = filtered.filter(item => item.category === selectedCategory);
     }
 
-    // Handle multiple tags
-    if (!selectedTags.includes('all')) {
-      filtered = filtered.filter(item => selectedTags.includes(item.variant));
+    // Filter by type (text/mark)
+    if (!selectedTypes.includes('all')) {
+      filtered = filtered.filter(item => selectedTypes.includes(item.type));
+    }
+
+    // Filter by variant (color/bw)
+    if (!selectedVariants.includes('all')) {
+      filtered = filtered.filter(item => selectedVariants.includes(item.variant));
     }
 
     setDisplayItems(filtered);
     if (!query.trim()) {
       setResults(filtered);
     }
-  }, [selectedCategories, selectedTags, jsonData, query]);
+  }, [selectedCategory, selectedTypes, selectedVariants, jsonData, query]);
 
-  const categories = ['all', 'logos', 'brands', 'flags'];
+  const categories = ['logos', 'brands', 'flags'];
   const tags = ['all', 'color', 'bw', 'original', 'square', 'text', 'mark'];
   // Setup Fuse search
   // Third effect stays the same
@@ -104,69 +126,85 @@ const Home = (props) => {
   }, [query, displayItems]);
 
   // Add handlers for multiple selections
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const values = Array.from(
-      e.target.selectedOptions,
-      (option: HTMLOptionElement) => option.value
-    );
+  // Create a function to handle category change that also resets tags
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    // Reset both type and variant selections to default
+    setSelectedTypes(['all']);
+    setSelectedVariants(['all']);
+  };
+
+  const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const values = Array.from(e.target.selectedOptions).map(opt => opt.value);
     if (values.includes('all')) {
-      setSelectedCategories(['all']);
+      setSelectedTypes(['all']);
     } else {
-      setSelectedCategories(values);
+      setSelectedTypes(values);
     }
   };
 
-  const handleTagChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const values = Array.from(
-      e.target.selectedOptions,
-      (option: HTMLOptionElement) => option.value
-    );
+  const handleVariantChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const values = Array.from(e.target.selectedOptions).map(opt => opt.value);
     if (values.includes('all')) {
-      setSelectedTags(['all']);
+      setSelectedVariants(['all']);
     } else {
-      setSelectedTags(values);
+      setSelectedVariants(values);
     }
+  };
+
+  const { types, variants } = useMemo(() =>
+    getAvailableFilters(jsonData), [jsonData]
+  );
+
+  const colorMap = {
+    color: '#3b82f6',
+    bw: '#374151',
   };
 
   return (
     <>
-      <select
-        multiple
-        value={selectedCategories}
-        onChange={handleCategoryChange}
-        className="select-multiple"
-      >
-        {categories.map(category => (
-          <option key={category} value={category}>
-            {capitalize(category)}
-          </option>
-        ))}
-      </select>
+      <TopNav>
+        <NavWrap>
+          <input
+            value={query}
+            type="text"
+            autoFocus={true}
+            className="inputSearch"
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search logos here..."
+          />
+          <TagGroup
+            tags={variants}
+            selectedTags={selectedVariants}
+            onTagsChange={setSelectedVariants}
+            variant="icon"
+          />
+        </NavWrap>
+      </TopNav>
+      <SelectMenu >
+        <Dropdown
+          selected={selectedCategory}
+          options={categories}
+          onChange={handleCategoryChange}
+        />
+        {/* Type Tags (text/mark) */}
+        <TagGroup
+          tags={types}
+          selectedTags={selectedTypes}
+          onTagsChange={setSelectedTypes}
+        />
+      </SelectMenu>
 
-      <select
-        multiple
-        value={selectedTags}
-        onChange={handleTagChange}
-        className="select-multiple"
-      >
-        {tags.map(tag => (
-          <option key={tag} value={tag}>
-            {capitalize(tag)}
-          </option>
-        ))}
-      </select>
-      <input
-        value={query}
-        type="text"
-        autoFocus={true}
-        className="inputSearch"
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder="Search from 120+ illlustrations..."
-      />
+
+
+
+
+
+
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <ImageContainer className={"grid-2"}>
+        <ImageContainer className={"grid-3"}>
           {results.map((logo, i) => (
             <ImageGrid
               name={logo.name}
@@ -221,6 +259,30 @@ const Title = styled.div`
     margin: 0;
   }
 `;
+
+const TopNav = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2px 0;
+
+`;
+
+const NavWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2px 0;
+
+`;
+
+const SelectMenu = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2px 0;
+`;
+
 
 
 
@@ -286,6 +348,7 @@ const ImageContainer = styled.div`
   }
   &.grid-3 {
     grid-template-columns: repeat(3, 1fr);
+    height: 100px;
   }
   &.grid-2 {
     grid-template-columns: repeat(2, 1fr);
