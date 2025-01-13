@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect, useMemo } from 'react';
 import styled from "styled-components";
-import { ListIcon, ShuffleIcon } from "../components/icons";
+import { CrossIcon, ListIcon, MenuIcon, ShuffleIcon } from "../components/icons";
 import {
   BlackMarkIcon,
   BlackTypeIcon,
@@ -35,6 +35,11 @@ const Home = (props) => {
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
   const onClickIcon = (event) => {
     props.parentCallback(event);
@@ -162,8 +167,28 @@ const Home = (props) => {
   };
 
   return (
-    <>
+    <HomeMenu>
       <TopNav>
+        <button
+          onClick={toggleMenu}
+          className={`menu`}
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+        >
+          {isOpen ? (
+            <CrossIcon />
+          ) : (
+            <MenuIcon />
+          )}
+        </button>
+        {isOpen && (
+          <MenuList>
+            <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Menu Item 1</a>
+            <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Menu Item 2</a>
+            <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Menu Item 3</a>
+          </MenuList>
+        )}
+
+
         <NavWrap>
           <input
             value={query}
@@ -195,33 +220,31 @@ const Home = (props) => {
         />
       </SelectMenu>
 
+      <LogoWrapper>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <ImageContainer className={"grid-3"}>
+            {results.map((logo, i) => (
+              <ImageGrid
+                name={logo.name}
+                url={logo.url}
+                keyword={"na"}
+                key={`${logo.name}-${logo.id}-${i}`}
+                color={"color"}
+                type={props.title}
+                imgRef={imgRef}
+                canRef={canvasRef}
+              />
+            ))}
+          </ImageContainer>
+        )}
+      </LogoWrapper>
 
 
-
-
-
-
-      {loading ? (
-        <div>Loading...</div>
-      ) : (
-        <ImageContainer className={"grid-3"}>
-          {results.map((logo, i) => (
-            <ImageGrid
-              name={logo.name}
-              url={logo.url}
-              keyword={"na"}
-              key={`${logo.name}-${logo.id}-${i}`}
-              color={"color"}
-              type={props.title}
-              imgRef={imgRef}
-              canRef={canvasRef}
-            />
-          ))}
-        </ImageContainer>
-      )}
       <canvas ref={canvasRef} style={{ display: "none" }} />
       <img ref={imgRef} style={{ display: "none" }} />
-    </>
+    </HomeMenu>
   );
 };
 
@@ -232,6 +255,8 @@ const capitalize = (str: string) => {
 const HomeMenu = styled.div`
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  height: 100%;
 `;
 
 const OptionBox = styled.div`
@@ -244,6 +269,15 @@ const OptionBox = styled.div`
     background: var(--list-hover-bg);
   }
 `;
+
+const MenuList = styled.div`
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  top: 80px;
+  background-color: white;
+`;
+
 
 const Title = styled.div`
   display: flex;
@@ -262,30 +296,41 @@ const Title = styled.div`
 
 const TopNav = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin: 2px 0;
-
+  border-bottom: 0.5px solid var(--figma-color-border);
+  position: relative;
+  z-index: 999;
+  gap: 12px;
+  .menu{
+    padding: 2px;
+  }
 `;
 
+const LogoWrapper = styled.div`
+  display: flex;
+  overflow-y: scroll;
+`;
 const NavWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 2px 0;
-
+  .inputSearch{
+    &:focus, &:active{
+      outline: 0;
+      border: none;
+      box-shadow: none;
+    }
+    
+  }
+  border-left: 1px solid var(--figma-color-border);
 `;
 
 const SelectMenu = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin: 2px 0;
+  border-left: 0.5px solid var(--figma-color-border);
 `;
-
-
-
-
 
 const ToolTip = styled.div`
   z-index: 100;
@@ -342,13 +387,14 @@ const ToolTip = styled.div`
 
 const ImageContainer = styled.div`
   display: grid;
-  z-index: -1;
+  width: 100%;
+  height: fit-content;
   &.grid-4 {
     grid-template-columns: repeat(4, 1fr);
   }
   &.grid-3 {
     grid-template-columns: repeat(3, 1fr);
-    height: 100px;
+    
   }
   &.grid-2 {
     grid-template-columns: repeat(2, 1fr);

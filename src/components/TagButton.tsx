@@ -43,7 +43,7 @@ const IconButton = styled.button<{ $isSelected: boolean }>`
     &:after {
       content: '';
       position: absolute;
-      inset: -2px;
+      inset: 4px;
       border: 2px solid #3b82f6;
       border-radius: 9999px;
     }

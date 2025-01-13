@@ -70,6 +70,58 @@ export const ArrowIcon = ({
   </svg>
 );
 
+// arrow icon
+export const MenuIcon = ({
+  height = "24px",
+  width = "24px",
+  secondaryColor,
+  ...props
+}: React.SVGProps<SVGSVGElement> & { secondaryColor?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    clipRule="evenodd"
+    fillRule="evenodd"
+    {...props}
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M3 12h18M3 6h18M3 18h18"
+    ></path>
+
+  </svg>
+);
+
+export const CrossIcon = ({
+  height = "24px",
+  width = "24px",
+  secondaryColor,
+  ...props
+}: React.SVGProps<SVGSVGElement> & { secondaryColor?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    clipRule="evenodd"
+    fillRule="evenodd"
+    {...props}
+  >
+    <path
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M18 6 6 18M6 6l12 12"
+    ></path>
+  </svg>
+);
+
 export const ColorDotIcon = ({
   height = "12px",
   width = "12px",
