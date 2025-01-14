@@ -175,19 +175,19 @@ const Home = (props) => {
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
         >
           {isOpen ? (
-            <CrossIcon />
+            <CrossIcon height={"20px"} width={"20px"} />
           ) : (
-            <MenuIcon />
+            <MenuIcon height={"20px"} width={"20px"} />
           )}
         </button>
         {isOpen && (
           <MenuList>
-            <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Menu Item 1</a>
-            <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Menu Item 2</a>
-            <a href="#" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Menu Item 3</a>
+            <List><a href="https://uilogos.co" target="_blank">uiLogos.co</a></List>
+            <List><a href="https://vjy.me" target="_blank">Author</a></List>
+            <List><a href="https://x.com/realvjy" target="_blank">X/Twiter</a></List>
+            <List><a href="https://instagram.com/realvjy" target="_blank">Instagram</a></List>
           </MenuList>
         )}
-
 
         <NavWrap>
           <input
@@ -198,12 +198,14 @@ const Home = (props) => {
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search logos here..."
           />
-          <TagGroup
-            tags={variants}
-            selectedTags={selectedVariants}
-            onTagsChange={setSelectedVariants}
-            variant="icon"
-          />
+          <ColorTag>
+            <TagGroup
+              tags={variants}
+              selectedTags={selectedVariants}
+              onTagsChange={setSelectedVariants}
+              variant="icon"
+            />
+          </ColorTag>
         </NavWrap>
       </TopNav>
       <SelectMenu >
@@ -274,8 +276,39 @@ const MenuList = styled.div`
   display: flex;
   position: absolute;
   flex-direction: column;
-  top: 80px;
+  top: 40px;
   background-color: white;
+  box-shadow: var(--menu-shadow);
+  border-radius: 12px;
+  padding: 4px;
+`;
+
+const List = styled.div`
+  display: flex;
+  a{
+    font-size: 12px;
+    line-height: 16px;
+    padding: 8px 10px;
+    min-width: 100px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--figma-color-text-secondary);
+    &:hover{
+      background-color: var(--figma-color-bg-hover);
+      color: var(--figma-color-text-hover);
+    }
+  }
+`;
+
+const ColorTag = styled.div`
+  padding: 12px;
+  .tag-wrap{
+    gap: 12px;
+  }
+  .icon-color{
+    filter: var(--image-filter);
+  }
 `;
 
 
@@ -300,9 +333,24 @@ const TopNav = styled.div`
   border-bottom: 0.5px solid var(--figma-color-border);
   position: relative;
   z-index: 999;
-  gap: 12px;
   .menu{
-    padding: 2px;
+    padding: 10px;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    color: var(--figma-color-text);
+    background-color: transparent;
+    &:hover{
+      background-color: var(--figma-color-bg-hover);
+    }
   }
 `;
 
@@ -314,8 +362,10 @@ const NavWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   .inputSearch{
-    &:focus, &:active{
+    background-color: transparent;
+    &:focus, &:active, &:hover{
       outline: 0;
       border: none;
       box-shadow: none;
@@ -328,8 +378,9 @@ const NavWrap = styled.div`
 const SelectMenu = styled.div`
   display: flex;
   align-items: center;
-  margin: 2px 0;
-  border-left: 0.5px solid var(--figma-color-border);
+  border-bottom: 0.5px solid var(--figma-color-border);
+  padding: 8px;
+  gap: 6px;
 `;
 
 const ToolTip = styled.div`

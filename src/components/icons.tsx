@@ -66,7 +66,7 @@ export const ArrowIcon = ({
     {...props}
   >
     <path d="M5.513 8.583a1 1 0 0 1 1.415 0l5.292 5.293 5.293-5.293a1 1 0 1 1 1.415 1.414l-6 6a1 1 0 0 1-1.415 0l-6-6a1 1 0 0 1 0-1.414"
-    />
+      fill="currentColor" />
   </svg>
 );
 

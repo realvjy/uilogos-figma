@@ -4,31 +4,30 @@ import { BWDotIcon, ColorDotIcon } from "./icons";
 
 // Styled components for the tag buttons
 const StyledTagButton = styled.button<{ $isSelected: boolean }>`
-  padding: 0.25rem 0.75rem;
+  padding: 6px 10px;
   border-radius: 9999px;
-  font-size: 0.875rem;
+  font-size: 12px;
+  line-height: 14px;
   font-weight: 500;
   border: none;
   cursor: pointer;
   transition: all 200ms;
-  
+  text-transform: capitalize;
   ${props => props.$isSelected ? `
-    background-color: #3b82f6;
-    color: white;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+
+    background-color: var(--figma-color-bg-selected);
+    color: var(--figma-color-text-selected);
   ` : `
-    background-color: #f3f4f6;
-    color: #374151;
+    background-color: var(--figma-color-bg-secondary);
+    color: var(--figma-color-text);
     &:hover {
-      background-color: #e5e7eb;
+      opacity: 0.8;
     }
   `}
 `;
 
 // Icon variant styled components
 const IconButton = styled.button<{ $isSelected: boolean }>`
-  width: 2.5rem;
-  height: 2.5rem;
   border-radius: 9999px;
   border: none;
   cursor: pointer;
@@ -38,12 +37,12 @@ const IconButton = styled.button<{ $isSelected: boolean }>`
   justify-content: center;
   position: relative;
   background: transparent;
-  
+  padding: 0;
   ${props => props.$isSelected && `
     &:after {
       content: '';
       position: absolute;
-      inset: 4px;
+      inset: -4px;
       border: 2px solid #3b82f6;
       border-radius: 9999px;
     }
@@ -53,16 +52,16 @@ const IconButton = styled.button<{ $isSelected: boolean }>`
     transform: scale(1.1);
   }
 
-  svg {
+  /* svg {
     width: 1.5rem;
     height: 1.5rem;
-  }
+  } */
 `;
 
 // Map of tags to their corresponding icons
 const iconMap: Record<string, React.ReactNode> = {
-  color: <ColorDotIcon />,
-  bw: <BWDotIcon />
+  color: <ColorDotIcon height={"16px"} width={"16px"} />,
+  bw: <BWDotIcon height={"16px"} width={"16px"} className="icon-color" />
 };
 
 interface TagButtonProps {
@@ -109,6 +108,7 @@ const TagsWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: row;
+  gap: 6px;
 `;
 
 const TagGroupTitle = styled.h3`
@@ -145,7 +145,7 @@ export const TagGroup: React.FC<TagGroupProps> = ({
   return (
     <TagGroupContainer>
       {title && <TagGroupTitle>{title}</TagGroupTitle>}
-      <TagsWrapper>
+      <TagsWrapper className="tag-wrap">
         {tags.map(tag => (
           <TagButton
             key={tag}

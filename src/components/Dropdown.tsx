@@ -65,30 +65,31 @@ export const Dropdown = ({
 // Styled Components
 const DropdownContainer = styled.div`
   position: relative;
-  min-width: 100px;
+  min-width: 90px;
 `;
 
 const DropdownButton = styled.button<{ isOpen: boolean }>`
   width: 100%;
-  padding: 8px 16px;
-  background: white;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
+  padding: 6px 10px;
+  border: none;
+  box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
   text-align: left;
   cursor: pointer;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+  border-radius: 14px;
   transition: all 0.2s ease;
-
+  background-color: var(--figma-color-bg-secondary);
+  color: var(--figma-color-text);
   &:hover {
-    background: #F7FAFC;
-    border-color: #CBD5E0;
+    background-color: var(--figma-color-bg-hover);
   }
-
   ${props => props.isOpen && `
-    border-color: #3B82F6;
-    box-shadow: 0 0 0 1px #3B82F6;
+    box-shadow: 0 0 0 1px var(--figma-color-bg-hover);
   `}
 `;
 
@@ -97,10 +98,11 @@ const DropdownContent = styled.div`
   top: calc(100% + 4px);
   left: 0;
   width: 100%;
-  background: white;
   border-radius: 8px;
-  border: 1px solid #E2E8F0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background-color: var(--figma-color-bg);
+  color: var(--figma-color-text);
+  box-shadow: var(--menu-shadow);
+  padding: 2px;
   z-index: 10;
 `;
 
@@ -110,13 +112,16 @@ const OptionItem = styled.div<{ isSelected: boolean }>`
   align-items: center;
   cursor: pointer;
   transition: all 0.2s ease;
-
+  font-size: 12px;
+  text-transform: capitalize;
+  border-radius: 6px;
+  font-weight: 500;
   &:hover {
     background: ${props => props.isSelected ? '#EBF5FF' : '#F7FAFC'};
   }
 
   ${props => props.isSelected && `
-    background: #EBF5FF;
+    background-color: var(--figma-color-bg-hover);
   `}
 
   &:first-child {
@@ -147,11 +152,12 @@ const Checkbox = styled.div<{ isSelected: boolean }>`
 `;
 
 const SelectedText = styled.span`
-  color: #1A202C;
-  font-size: 14px;
+  color: var(--figma-color-text);
+  font-size: 12px;
+  line-height: 14px;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-transform: capitalize;
 `;
 
 const StyledChevron = styled(ArrowIcon) <{ isOpen: boolean }>`
