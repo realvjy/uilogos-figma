@@ -59,6 +59,8 @@ export const checkSelection = (logoCount) => {
 export const getLogos = async (data, imgRef, canRef) => {
   shuffle(data);
 
+  console.log(data);
+
   //@ts-ignore
   parent.postMessage(
     {
@@ -75,13 +77,13 @@ export const getLogos = async (data, imgRef, canRef) => {
     var newBytes = [];
     if (totalSelection) {
       for (let i = 0; i < totalSelection; i++) {
-        const image = await loadImage(`${data[i].URL}`, imgRef);
+        const image = await loadImage(`${data[i].url}`, imgRef);
 
         const { imageData, canvas, context } = getImageData(image, canRef);
 
         const height = imageData.height;
         const width = imageData.width;
-        const name = data[i].Name;
+        const name = data[i].name;
 
         const imageEncoded = await encodeFigma(canvas, context, imageData);
 

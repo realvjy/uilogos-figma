@@ -260,7 +260,15 @@ const Home = (props) => {
       </BlurDiv>
       <BigButton>
         <ButtonWrap>
-          <LinkButton href="https://www.figma.com/community/plugin/1120667703468196103" className="blue-btn">Fill selection <ShuffleIcon height={14} width={14} /></LinkButton>
+          <LinkButton
+            className="blue-btn"
+            onClick={() =>
+              getLogos(results, imgRef, canvasRef)
+            }
+          >
+            Fill selection
+            <ShuffleIcon height={14} width={14} />
+          </LinkButton>
         </ButtonWrap>
       </BigButton>
       <canvas ref={canvasRef} style={{ display: "none" }} />
@@ -518,7 +526,7 @@ const ButtonWrap = styled.div`
     align-items: center;
 
 `
-export const LinkButton = styled.a`
+export const LinkButton = styled.div`
   padding: 12px;
   margin: 12px;
   line-height: 16px;

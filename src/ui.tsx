@@ -46,6 +46,8 @@ const App = (props) => {
     fetchData();
   }, []);
 
+  console.log(fullLogosColor);
+
   // Not in use
   //@ts-ignore
   function onWindowResize(windowSize: { width: number; height: number }) {
