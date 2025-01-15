@@ -71,17 +71,64 @@ export const getAllPngUrls = (data) => {
     });
 
     // Process brands category
-    data.categories.brands.items.forEach(item => {
-        if (item.variants.color) {
-            item.variants.color.forEach(url => {
-                urls.push({ url, category: 'brands', type: 'brand', variant: 'color', name: item.name });
-            });
+    data.categories.brands.items.forEach((item: LogoItem) => {
+        const variants = item.variants;
+        // Handle text variants
+        if (variants.text) {
+            if (variants.text.color) {
+                urls.push({
+                    url: variants.text.color,
+                    category: 'brands',
+                    type: 'text',
+                    variant: 'color',
+                    name: item.name,
+                    id: item.id
+                });
+            }
+            if (variants.text.bw) {
+                urls.push({
+                    url: variants.text.bw,
+                    category: 'brands',
+                    type: 'text',
+                    variant: 'bw',
+                    name: item.name,
+                    id: item.id
+                });
+            }
         }
-        if (item.variants.bw) {
-            item.variants.bw.forEach(url => {
-                urls.push({ url, category: 'brands', type: 'brand', variant: 'bw', name: item.name });
-            });
+
+        if (variants.mark) {
+            if (variants.mark.color) {
+                urls.push({
+                    url: variants.mark.color,
+                    category: 'brands',
+                    type: 'mark',
+                    variant: 'color',
+                    name: item.name,
+                    id: item.id
+                });
+            }
+            if (variants.mark.bw) {
+                urls.push({
+                    url: variants.mark.bw,
+                    category: 'brands',
+                    type: 'mark',
+                    variant: 'bw',
+                    name: item.name,
+                    id: item.id
+                });
+            }
         }
+        // if (item.variants.color) {
+        //     item.variants.color.forEach(url => {
+        //         urls.push({ url, category: 'brands', type: 'brand', variant: 'color', name: item.name });
+        //     });
+        // }
+        // if (item.variants.bw) {
+        //     item.variants.bw.forEach(url => {
+        //         urls.push({ url, category: 'brands', type: 'brand', variant: 'bw', name: item.name });
+        //     });
+        // }
     });
 
     // Process flags category

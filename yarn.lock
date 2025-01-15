@@ -1887,6 +1887,11 @@ pretty-error@^4.0.0:
     lodash "^4.17.20"
     renderkid "^3.0.0"
 
+progressive-blur@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/progressive-blur/-/progressive-blur-1.0.0.tgz#f26e8cf4bbfac11c3a8d5c500da2674c53c5df64"
+  integrity sha512-BZkJJHksqsxt9eJ+bv5ptXyUDa+ZbpOzdGJNJVxFo2qF0u+Y38E1oKWidt6JIaHCM1xk9o8LSjf9TbtHpbx9WQ==
+
 promise@^7.1.1:
   version "7.3.1"
   resolved "https://registry.npmjs.org/promise/-/promise-7.3.1.tgz"

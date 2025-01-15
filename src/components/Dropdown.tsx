@@ -117,7 +117,7 @@ const OptionItem = styled.div<{ isSelected: boolean }>`
   border-radius: 6px;
   font-weight: 500;
   &:hover {
-    background: ${props => props.isSelected ? '#EBF5FF' : '#F7FAFC'};
+    background: ${props => props.isSelected ? 'var(--figma-color-bg-hover)' : 'var(--figma-color-bg-secondary)'};
   }
 
   ${props => props.isSelected && `

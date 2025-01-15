@@ -61,7 +61,7 @@ const Button = styled.button`
   padding: 8px;
   border: 0;
   background-color: white;
-  box-shadow: 0px 0px 0px 0.5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 0px 0.5px rgba(0, 0, 0, 0.15);
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -71,11 +71,13 @@ const Button = styled.button`
   img {
     max-width: 70px;
     max-height: 40px;
+    transition: all 0.3s ease;
   }
   :hover {
     /* border: 1px solid var(--figma-color-border-brand); */
     img {
       opacity: 0.9;
+      transform: scale(1.1);
     }
   }
   &.flag {

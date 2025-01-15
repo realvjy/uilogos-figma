@@ -39,7 +39,8 @@
   --border-radius-small: 2px;
   --border-radius-med: 5px;
   --border-radius-large: 6px;
-
+  --blue: #3962F5;
+  --white: #fff;
   margin: 0;
   font-family: var(--font-stack);
   -webkit-font-smoothing: antialiased;
