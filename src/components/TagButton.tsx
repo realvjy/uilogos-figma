@@ -3,34 +3,34 @@ import styled from 'styled-components';
 import { BWDotIcon, ColorDotIcon } from "./icons";
 
 // Styled components for the tag buttons
-const StyledTagButton = styled.button<{ $isSelected: boolean }>`
+const StyledTagButton = styled.button<{ $isSelected: boolean; $disabled: boolean }>`
   padding: 6px 10px;
   border-radius: 9999px;
   font-size: 12px;
   line-height: 14px;
   font-weight: 500;
   border: none;
-  cursor: pointer;
+  cursor: ${props => props.$disabled ? 'pointer' : 'pointer'};
   transition: all 200ms;
   text-transform: capitalize;
+  opacity: ${props => props.$disabled ? 0.5 : 1};
   ${props => props.$isSelected ? `
-
     background-color: var(--figma-color-bg-selected);
     color: var(--figma-color-text-selected);
   ` : `
     background-color: var(--figma-color-bg-secondary);
     color: var(--figma-color-text);
     &:hover {
-      opacity: 0.8;
+      opacity: ${props.$disabled ? 0.5 : 0.8};
     }
   `}
 `;
 
 // Icon variant styled components
-const IconButton = styled.button<{ $isSelected: boolean }>`
+const IconButton = styled.button<{ $isSelected: boolean; $disabled: boolean }>`
   border-radius: 9999px;
   border: none;
-  cursor: pointer;
+  cursor: ${props => props.$disabled ? 'not-allowed' : 'pointer'};
   transition: all 200ms;
   display: flex;
   align-items: center;
@@ -38,7 +38,8 @@ const IconButton = styled.button<{ $isSelected: boolean }>`
   position: relative;
   background: transparent;
   padding: 0;
-  ${props => props.$isSelected && `
+  opacity: ${props => props.$disabled ? 0.7 : 1};
+  ${props => props.$isSelected && !props.$disabled && `
     &:after {
       content: '';
       position: absolute;
@@ -49,13 +50,8 @@ const IconButton = styled.button<{ $isSelected: boolean }>`
   `}
 
   &:hover {
-    transform: scale(1.1);
+    transform: ${props => props.$disabled ? 'none' : 'scale(1.1)'};
   }
-
-  /* svg {
-    width: 1.5rem;
-    height: 1.5rem;
-  } */
 `;
 
 // Map of tags to their corresponding icons
@@ -69,20 +65,30 @@ interface TagButtonProps {
   isSelected: boolean;
   onToggle: (tag: string) => void;
   variant?: 'text' | 'icon';
+  disabled?: boolean;
 }
 
 export const TagButton: React.FC<TagButtonProps> = ({
   tag,
   isSelected,
   onToggle,
-  variant = 'text'
+  variant = 'text',
+  disabled = false
 }) => {
+  const handleClick = () => {
+    if (!disabled) {
+      onToggle(tag);
+    }
+  };
+
   if (variant === 'icon') {
     return (
       <IconButton
         $isSelected={isSelected}
-        onClick={() => onToggle(tag)}
+        $disabled={disabled}
+        onClick={handleClick}
         title={tag}
+        disabled={disabled}
       >
         {iconMap[tag]}
       </IconButton>
@@ -92,7 +98,9 @@ export const TagButton: React.FC<TagButtonProps> = ({
   return (
     <StyledTagButton
       $isSelected={isSelected}
-      onClick={() => onToggle(tag)}
+      $disabled={disabled}
+      onClick={handleClick}
+      disabled={disabled}
     >
       {tag}
     </StyledTagButton>
@@ -100,8 +108,8 @@ export const TagButton: React.FC<TagButtonProps> = ({
 };
 
 // Container components
-const TagGroupContainer = styled.div`
-  
+const TagGroupContainer = styled.div<{ $disabled?: boolean }>`
+  opacity: ${props => props.$disabled ? 0.7 : 1};
 `;
 
 const TagsWrapper = styled.div`
@@ -123,6 +131,7 @@ interface TagGroupProps {
   selectedTags: string[];
   onTagsChange: (tags: string[]) => void;
   variant?: 'text' | 'icon';
+  disabled?: boolean;
 }
 
 export const TagGroup: React.FC<TagGroupProps> = ({
@@ -130,20 +139,21 @@ export const TagGroup: React.FC<TagGroupProps> = ({
   tags,
   selectedTags,
   onTagsChange,
-  variant = 'text'
+  variant = 'text',
+  disabled = false
 }) => {
   const handleTagToggle = (tag: string) => {
+    if (disabled) return;
+
     if (selectedTags.includes(tag)) {
-      // If clicking selected tag, deselect it (set to 'all' internally)
       onTagsChange(['all']);
     } else {
-      // Select new tag, removing any previous selections
       onTagsChange([tag]);
     }
   };
 
   return (
-    <TagGroupContainer>
+    <TagGroupContainer $disabled={disabled}>
       {title && <TagGroupTitle>{title}</TagGroupTitle>}
       <TagsWrapper className="tag-wrap">
         {tags.map(tag => (
@@ -153,6 +163,7 @@ export const TagGroup: React.FC<TagGroupProps> = ({
             isSelected={selectedTags.includes(tag)}
             onToggle={handleTagToggle}
             variant={variant}
+            disabled={disabled}
           />
         ))}
       </TagsWrapper>

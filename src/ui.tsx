@@ -46,6 +46,7 @@ const App = (props) => {
     fetchData();
   }, []);
 
+
   // Not in use
   //@ts-ignore
   function onWindowResize(windowSize: { width: number; height: number }) {

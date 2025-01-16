@@ -1,7 +1,9 @@
 import * as React from "react";
 import { useState, useEffect, useMemo } from 'react';
 import styled from "styled-components";
-import { CrossIcon, ListIcon, MenuIcon, ShuffleIcon } from "../components/icons";
+import { CrossIcon, ListIcon, MenuIcon, RealvjyC2, ShuffleIcon } from "../components/icons";
+import { RadialBlur, LinearBlur } from "progressive-blur";
+
 import {
   BlackMarkIcon,
   BlackTypeIcon,
@@ -11,12 +13,13 @@ import {
   FlagIcon,
 } from "../components/logos-icons";
 import Footer from "../components/footer";
-import { getLogos } from "../components/helpers";
+import { getLogos, shuffle } from "../components/helpers";
 import { getAllPngUrls } from "../utils/uiLogosHelper";
 import ImageGrid from "../components/image-grid";
 import Fuse from "fuse.js";
 import { TagButton, TagGroup } from "../components/TagButton";
 import { Dropdown } from "../components/Dropdown";
+import GradientBlurOverlay from "../components/GradientBlurOverlay";
 
 declare function require(path: string): any;
 
@@ -130,13 +133,18 @@ const Home = (props) => {
     }
   }, [query, displayItems]);
 
+
   // Add handlers for multiple selections
   // Create a function to handle category change that also resets tags
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
     // Reset both type and variant selections to default
     setSelectedTypes(['all']);
-    setSelectedVariants(['all']);
+    setSelectedVariants(['color']);
+    if (category == "flags") {
+      setSelectedVariants(['all']);
+    }
+    setQuery("");
   };
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -165,6 +173,7 @@ const Home = (props) => {
     color: '#3b82f6',
     bw: '#374151',
   };
+
 
   return (
     <HomeMenu>
@@ -204,6 +213,7 @@ const Home = (props) => {
               selectedTags={selectedVariants}
               onTagsChange={setSelectedVariants}
               variant="icon"
+              disabled={selectedCategory == "flags" ? true : false}
             />
           </ColorTag>
         </NavWrap>
@@ -219,12 +229,13 @@ const Home = (props) => {
           tags={types}
           selectedTags={selectedTypes}
           onTagsChange={setSelectedTypes}
+          disabled={selectedCategory == "flags" ? true : false}
         />
       </SelectMenu>
 
       <LogoWrapper>
         {loading ? (
-          <div>Loading...</div>
+          <div className="load">Loading...</div>
         ) : (
           <ImageContainer className={"grid-3"}>
             {results.map((logo, i) => (
@@ -234,16 +245,35 @@ const Home = (props) => {
                 keyword={"na"}
                 key={`${logo.name}-${logo.id}-${i}`}
                 color={"color"}
-                type={props.title}
+                type={selectedCategory}
                 imgRef={imgRef}
                 canRef={canvasRef}
               />
             ))}
           </ImageContainer>
         )}
+
+        <h4>made by <a href="https://vjy.me?ui" target="_blank"><RealvjyC2 height={30} width={48} /></a></h4>
       </LogoWrapper>
 
-
+      <BlurDiv>
+        <LinearBlur
+          side="bottom"
+        />
+      </BlurDiv>
+      <BigButton>
+        <ButtonWrap>
+          <LinkButton
+            className="blue-btn"
+            onClick={() =>
+              getLogos(results, imgRef, canvasRef)
+            }
+          >
+            Fill selection
+            <ShuffleIcon height={14} width={14} />
+          </LinkButton>
+        </ButtonWrap>
+      </BigButton>
       <canvas ref={canvasRef} style={{ display: "none" }} />
       <img ref={imgRef} style={{ display: "none" }} />
     </HomeMenu>
@@ -259,6 +289,7 @@ const HomeMenu = styled.div`
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+  position: relative;
 `;
 
 const OptionBox = styled.div`
@@ -277,14 +308,17 @@ const MenuList = styled.div`
   position: absolute;
   flex-direction: column;
   top: 40px;
-  background-color: white;
+  background-color: var(--figma-color-bg);
   box-shadow: var(--menu-shadow);
   border-radius: 12px;
   padding: 4px;
 `;
 
+
+
 const List = styled.div`
   display: flex;
+  
   a{
     font-size: 12px;
     line-height: 16px;
@@ -356,7 +390,30 @@ const TopNav = styled.div`
 
 const LogoWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   overflow-y: scroll;
+  padding-bottom: 90px;
+  
+  .load{
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  h4{
+    width: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    gap: 4px;
+    margin-top: 20px;
+    color: var(--figma-color-text);
+    opacity: 0.6;
+  }
 `;
 const NavWrap = styled.div`
   display: flex;
@@ -440,6 +497,7 @@ const ImageContainer = styled.div`
   display: grid;
   width: 100%;
   height: fit-content;
+  background-color: var(--white);
   &.grid-4 {
     grid-template-columns: repeat(4, 1fr);
   }
@@ -451,3 +509,64 @@ const ImageContainer = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
 `;
+
+const BigButton = styled.div`
+    background: transparent;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+`
+
+const ButtonWrap = styled.div`
+    background: transparent;
+    bottom: 0;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+
+`
+export const LinkButton = styled.div`
+  padding: 12px;
+  margin: 12px;
+  line-height: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--white);
+  @media screen and (max-width: 768px) {
+     min-width: 220px;
+     justify-content: center;
+  }
+  svg{
+    fill: var(--white);
+  }
+  &.blue-btn{
+    background: var(--blue);
+    color: var(--white);
+    padding-bottom: 14px;
+    box-shadow: 0px 0px 0px 1px #264DDB, 0px 1px 3px rgba(20, 52, 135, 0.6), inset 0px -3px 0.4px #234DE2;
+    &:hover{
+        box-shadow: 0px 0px 0px 1px #264DDB, 0px 1px 3px rgba(20, 52, 135, 0.6), inset 0px -1px 0.4px #234DE2;
+    }
+  }
+`;
+
+
+const BlurDiv = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 110px;
+  pointer-events: none;
+`
