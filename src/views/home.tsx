@@ -174,6 +174,7 @@ const Home = (props) => {
     bw: '#374151',
   };
 
+
   return (
     <HomeMenu>
       <TopNav>
@@ -212,6 +213,7 @@ const Home = (props) => {
               selectedTags={selectedVariants}
               onTagsChange={setSelectedVariants}
               variant="icon"
+              disabled={selectedCategory == "flags" ? true : false}
             />
           </ColorTag>
         </NavWrap>
@@ -227,6 +229,7 @@ const Home = (props) => {
           tags={types}
           selectedTags={selectedTypes}
           onTagsChange={setSelectedTypes}
+          disabled={selectedCategory == "flags" ? true : false}
         />
       </SelectMenu>
 
@@ -242,7 +245,7 @@ const Home = (props) => {
                 keyword={"na"}
                 key={`${logo.name}-${logo.id}-${i}`}
                 color={"color"}
-                type={props.title}
+                type={selectedCategory}
                 imgRef={imgRef}
                 canRef={canvasRef}
               />

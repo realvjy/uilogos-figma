@@ -125,6 +125,29 @@ export const getLogo = async (name, url, imgRef, canRef) => {
   setBg(newBytes, "single");
 };
 
+export const getLogoWithPos = async (name, url, imgRef, canRef, pos) => {
+
+
+  const image = await loadImage(url, imgRef);
+  var newBytes = [];
+  const { imageData, canvas, context } = getImageData(image, canRef);
+
+  const height = imageData.height;
+  const width = imageData.width;
+
+  const imageEncoded = await encodeFigma(canvas, context, imageData);
+
+  let imgBytes = {
+    imgBytes: imageEncoded,
+    height: height,
+    width: width,
+    name: name,
+    pos: pos
+  };
+  newBytes.push(imgBytes);
+  setBg(newBytes, "single");
+};
+
 // Set Image on Figma convas
 export const setBg = async (imageData, fillType) => {
   parent.postMessage(

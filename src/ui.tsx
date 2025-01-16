@@ -46,7 +46,6 @@ const App = (props) => {
     fetchData();
   }, []);
 
-  console.log(fullLogosColor);
 
   // Not in use
   //@ts-ignore

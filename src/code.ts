@@ -6,7 +6,7 @@ import { checkNode, fillWithImage, getFrameSize } from "./components/helpers";
 // Show the plugin UI
 figma.showUI(__html__, {
   width: 300,
-  height: 500,
+  height: 480,
   themeColors: true
 }
 );
@@ -84,6 +84,8 @@ figma.ui.onmessage = (msg) => {
         node.name = name;
         node.x = Math.round(figma.viewport.center.x - node.width / 2);
         node.y = Math.round(figma.viewport.center.y - node.height / 2);
+
+
         fillWithImage(newBytes, w, h, node);
         figma.notify(' \' ' + name + '\' added from uiLogos', { timeout: 1200 });
         return;
@@ -114,3 +116,4 @@ figma.ui.onmessage = (msg) => {
 
   //   figma.closePlugin()
 }
+
