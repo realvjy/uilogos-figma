@@ -75,7 +75,7 @@ figma.ui.onmessage = (msg) => {
       let name = msg.data.imageData[0].name;
       let h = msg.data.imageData[0].height;
       let w = msg.data.imageData[0].width;
-      if (!node) {
+      if (!node || node.type == "SLIDE") {
         //@ts-ignore
         node = figma.createRectangle();
         const newBytes: Uint8Array = msg.data.imageData[0].imgBytes;

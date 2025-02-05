@@ -7,7 +7,8 @@
   "documentAccess": "dynamic-page",
   "editorType": [
     "figma",
-    "figjam"
+    "figjam",
+    "slides"
   ],
   "networkAccess": {
     "allowedDomains": [
